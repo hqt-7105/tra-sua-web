@@ -105,3 +105,5 @@ Trang quản trị: http://localhost:5173/admin
 2. Đọc `docs/PHAN_CONG_SPRINT_1.md` / `PHAN_CONG_SPRINT_2.md` để biết task của mình.
 3. Đọc `ToppingDecorator.js` và `tests/decorator.test.js` để xem mẫu cách viết.
 4. Mở file pattern của mình, đọc khối hợp đồng ở đầu file, rồi bỏ `todo` trong test tương ứng và code cho tới khi PASS.
+
+<!-- thu khoa nhanh -->
