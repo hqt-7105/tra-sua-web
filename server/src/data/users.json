@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "email": "admin@may.vn",
+    "name": "Quản trị viên",
+    "role": "admin",
+    "passwordHash": "scrypt$f768eefcf8b29357aa2a0ba8dc6cec7b$44e048841f8df2227f97191e628c60d3a600f8b46e60f2777fe15bd3fa4345bb"
+  },
+  {
+    "id": 2,
+    "email": "staff@may.vn",
+    "name": "Nhân viên quầy",
+    "role": "staff",
+    "passwordHash": "scrypt$7194aec392e603658cd35e161eed6037$b8a44337f1c3f333c006e193bd05444d14e4360112dd312514f3f9d5865b680c"
+  }
+]

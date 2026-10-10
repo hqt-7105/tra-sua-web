@@ -1,0 +1,112 @@
+[
+  {
+    "id": "ts-truyen-thong",
+    "categoryId": "tra-sua",
+    "name": "Trà sữa truyền thống",
+    "basePrice": 35000,
+    "description": "Hồng trà đậm vị pha sữa béo nhẹ, công thức nhà làm.",
+    "image": null,
+    "isBestSeller": true,
+    "isActive": true
+  },
+  {
+    "id": "ts-o-long",
+    "categoryId": "tra-sua",
+    "name": "Trà sữa Ô Long",
+    "basePrice": 39000,
+    "description": "Ô Long rang thơm khói nhẹ, hậu vị ngọt thanh.",
+    "image": null,
+    "isBestSeller": true,
+    "isActive": true
+  },
+  {
+    "id": "ts-matcha",
+    "categoryId": "tra-sua",
+    "name": "Trà sữa Matcha",
+    "basePrice": 42000,
+    "description": "Matcha Nhật pha sữa tươi, vị chát dịu.",
+    "image": null,
+    "isBestSeller": false,
+    "isActive": true
+  },
+  {
+    "id": "ts-duong-den",
+    "categoryId": "tra-sua",
+    "name": "Sữa tươi đường đen",
+    "basePrice": 45000,
+    "description": "Sữa tươi, siro đường đen nấu tay, kèm trân châu.",
+    "image": null,
+    "isBestSeller": true,
+    "isActive": true
+  },
+  {
+    "id": "ttc-dao",
+    "categoryId": "tra-trai-cay",
+    "name": "Trà đào cam sả",
+    "basePrice": 39000,
+    "description": "Trà đen, đào miếng, cam tươi và sả thơm.",
+    "image": null,
+    "isBestSeller": true,
+    "isActive": true
+  },
+  {
+    "id": "ttc-vai",
+    "categoryId": "tra-trai-cay",
+    "name": "Trà vải hoa hồng",
+    "basePrice": 39000,
+    "description": "Trà lài, vải ngâm và chút hương hoa hồng.",
+    "image": null,
+    "isBestSeller": false,
+    "isActive": true
+  },
+  {
+    "id": "ttc-chanh-day",
+    "categoryId": "tra-trai-cay",
+    "name": "Trà chanh dây",
+    "basePrice": 35000,
+    "description": "Chua ngọt sảng khoái, hợp ngày nắng.",
+    "image": null,
+    "isBestSeller": false,
+    "isActive": true
+  },
+  {
+    "id": "cf-sua-da",
+    "categoryId": "ca-phe",
+    "name": "Cà phê sữa đá",
+    "basePrice": 29000,
+    "description": "Robusta phin truyền thống với sữa đặc.",
+    "image": null,
+    "isBestSeller": false,
+    "isActive": true
+  },
+  {
+    "id": "cf-muoi",
+    "categoryId": "ca-phe",
+    "name": "Cà phê muối",
+    "basePrice": 35000,
+    "description": "Cà phê đậm, lớp kem muối béo mặn nhẹ.",
+    "image": null,
+    "isBestSeller": false,
+    "isActive": true
+  },
+  {
+    "id": "dx-socola",
+    "categoryId": "da-xay",
+    "name": "Socola đá xay",
+    "basePrice": 49000,
+    "description": "Socola đậm xay cùng đá, phủ kem tươi.",
+    "image": null,
+    "isBestSeller": false,
+    "isActive": true
+  },
+  {
+    "id": "dx-cookie",
+    "categoryId": "da-xay",
+    "name": "Cookie đá xay",
+    "basePrice": 52000,
+    "description": "Bánh cookie socola xay cùng sữa và đá.",
+    "image": null,
+    "isBestSeller": false,
+    "isActive": true
+  }
+]

@@ -1,0 +1,8 @@
+[
+  { "id": "tran-chau-den", "name": "Trân châu đen", "price": 5000, "isActive": true },
+  { "id": "tran-chau-trang", "name": "Trân châu trắng", "price": 5000, "isActive": true },
+  { "id": "tran-chau-hoang-kim", "name": "Trân châu hoàng kim", "price": 8000, "isActive": true },
+  { "id": "pudding", "name": "Pudding trứng", "price": 7000, "isActive": true },
+  { "id": "thach-dua", "name": "Thạch dừa", "price": 5000, "isActive": true },
+  { "id": "kem-cheese", "name": "Kem cheese", "price": 10000, "isActive": true }
+]

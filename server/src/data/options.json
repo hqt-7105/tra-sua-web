@@ -1,0 +1,9 @@
+{
+  "sizes": [
+    { "id": "M", "name": "Size M", "extraPrice": 0 },
+    { "id": "L", "name": "Size L", "extraPrice": 6000 }
+  ],
+  "sugarLevels": [0, 30, 50, 70, 100],
+  "iceLevels": [0, 30, 50, 70, 100],
+  "defaults": { "size": "M", "sugar": 100, "ice": 100, "quantity": 1 }
+}
