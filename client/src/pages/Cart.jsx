@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import TaskNotice from '../components/TaskNotice.jsx';
+import VoucherInput from '../components/VoucherInput.jsx';
 
 export default function Cart() {
   return (
@@ -14,12 +15,8 @@ export default function Cart() {
           </ul>
         </TaskNotice>
 
-        <TaskNotice owner="TV4" task="Ô nhập mã giảm giá (VoucherInput)" pattern="Strategy">
-          <ul>
-            <li>Component <code>src/components/VoucherInput.jsx</code> nhận <code>subtotal</code>, gọi <code>POST /api/vouchers/validate</code></li>
-            <li>Hiện số tiền giảm và tổng mới, hoặc thông báo lỗi (hết hạn, chưa đủ đơn tối thiểu)</li>
-          </ul>
-        </TaskNotice>
+        {/* Tạm dùng tạm tính giả 100.000đ để thử mã; TV1 thay bằng tạm tính của giỏ thật. */}
+        <VoucherInput subtotal={100000} />
 
         <div className="cart__actions">
           <Link to="/menu" className="btn btn--ghost">Chọn thêm món</Link>

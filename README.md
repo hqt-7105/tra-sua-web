@@ -83,7 +83,7 @@ tra-sua-web/
 | Structural | Facade | `server/src/patterns/structural/OrderFacade.js` | TV1 | ⏳ Sprint 2 |
 | Structural | Adapter | `server/src/patterns/structural/PaymentAdapter.js` | TV3 | ⏳ Sprint 2 |
 | Structural | Proxy | `server/src/patterns/structural/MenuServiceProxy.js` | TV4 | ⏳ Sprint 2 |
-| Behavioral | Strategy | `server/src/patterns/behavioral/DiscountStrategy.js` | TV4 | ⏳ Sprint 1 |
+| Behavioral | Strategy | `server/src/patterns/behavioral/DiscountStrategy.js` | TV4 | ✅ Xong ([docs](docs/patterns/strategy.md)) |
 | Behavioral | State | `server/src/patterns/behavioral/OrderState.js` | TV5 | ⏳ Sprint 1 |
 | Behavioral | Observer | `server/src/patterns/behavioral/OrderEvents.js` | TV2 | ⏳ Sprint 2 |
 | Behavioral | Chain of Responsibility | `server/src/patterns/behavioral/OrderValidation.js` | TV5 | ⏳ Sprint 2 |
