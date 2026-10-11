@@ -2,12 +2,56 @@ import { Link } from 'react-router-dom';
 import { useFetch } from '../api/useFetch.js';
 import DrinkCard from '../components/DrinkCard.jsx';
 import { Loading, ErrorBox } from '../components/Status.jsx';
+import { formatPrice } from '../utils/format.js';
 
-/**
- * Landing page — bản cơ bản (Sprint 0).
- * TODO(TV2): hoàn thiện theo Figma: ảnh thật, mục Khuyến mãi lấy từ voucher,
- * mục Đánh giá khách hàng, bản đồ cửa hàng, hiệu ứng cuộn, responsive.
- */
+const REVIEWS = [
+  {
+    name: 'Minh Thư',
+    note: 'Khách quen · Quận 1',
+    text: 'Trà sữa Ô Long thơm mùi trà rõ, chọn 50% đường là vừa miệng. Đặt online 25 phút đã có.',
+  },
+  {
+    name: 'Hoàng Nam',
+    note: 'Đặt cho cả phòng',
+    text: 'Đặt 8 ly mỗi ly một kiểu đá, đường mà giao đúng hết. Trang theo dõi đơn rất tiện.',
+  },
+  {
+    name: 'Thu Hà',
+    note: 'Fan trân châu',
+    text: 'Trân châu hoàng kim dai mềm, sữa tươi đường đen đậm vị. Hay dùng mã FREESHIP.',
+  },
+];
+
+const STORE = {
+  address: '123 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh',
+  hours: '08:00 – 22:00 mỗi ngày (nhận đơn online tới 21:59)',
+  hotline: '0900 000 000',
+};
+
+function Promotions() {
+  const { data: vouchers, error } = useFetch('/vouchers');
+  return (
+    <div className="promo">
+      <div>
+        <h2>Khuyến mãi tuần này</h2>
+        <p className="muted">Nhập mã ở giỏ hàng để được giảm giá.</p>
+      </div>
+      {error && <p className="muted">Chưa tải được mã khuyến mãi, bạn thử lại sau nhé.</p>}
+      {vouchers && (
+        <ul className="promo__codes">
+          {vouchers.map((v) => (
+            <li key={v.code} className="code">
+              <strong>{v.code}</strong> · {v.message}
+              {v.minOrder > 0 && <span className="code__min">Đơn từ {formatPrice(v.minOrder)}</span>}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/** Landing page — TV2. */
 export default function Home() {
   const { data: bestSellers, loading, error } = useFetch('/drinks?bestSeller=true');
 
@@ -32,8 +76,10 @@ export default function Home() {
             </div>
           </div>
           <div className="hero__visual" aria-hidden>
-            <div className="hero__cup">🧋</div>
-            <div className="hero__bubble hero__bubble--1">-20% ly thứ 2</div>
+            <div className="hero__cup">
+              <img src="/images/drinks/ts-duong-den.svg" alt="" />
+            </div>
+            <div className="hero__bubble hero__bubble--1">5 mức đường, 5 mức đá</div>
             <div className="hero__bubble hero__bubble--2">Freeship từ 99k</div>
           </div>
         </div>
@@ -60,17 +106,17 @@ export default function Home() {
       <section className="section section--alt">
         <div className="container features">
           <div className="feature">
-            <span className="feature__icon">🍃</span>
+            <span className="feature__icon" aria-hidden>🍃</span>
             <h3>Trà ủ mỗi sáng</h3>
             <p className="muted">Lá trà tuyển chọn, ủ mới mỗi ngày, không dùng bột pha sẵn.</p>
           </div>
           <div className="feature">
-            <span className="feature__icon">🎛️</span>
+            <span className="feature__icon" aria-hidden>🎛️</span>
             <h3>Tùy chỉnh theo ý bạn</h3>
             <p className="muted">5 mức đường, 5 mức đá, 6 loại topping, 2 size.</p>
           </div>
           <div className="feature">
-            <span className="feature__icon">🛵</span>
+            <span className="feature__icon" aria-hidden>🛵</span>
             <h3>Giao nhanh</h3>
             <p className="muted">Theo dõi đơn từ lúc pha chế tới khi giao tới tay.</p>
           </div>
@@ -79,16 +125,48 @@ export default function Home() {
 
       <section className="section">
         <div className="container">
-          <div className="promo">
-            <div>
-              <h2>Khuyến mãi tuần này</h2>
-              <p className="muted">Nhập mã ở giỏ hàng để được giảm giá.</p>
-            </div>
-            <div className="promo__codes">
-              <span className="code">MAY10 · Giảm 10%</span>
-              <span className="code">FREESHIP · Miễn phí giao</span>
-            </div>
+          <Promotions />
+        </div>
+      </section>
+
+      <section className="section section--alt">
+        <div className="container">
+          <h2>Khách hàng nói gì</h2>
+          <ul className="reviews">
+            {REVIEWS.map((review) => (
+              <li key={review.name} className="review">
+                <p className="review__stars" aria-label="5 trên 5 sao">★★★★★</p>
+                <blockquote>“{review.text}”</blockquote>
+                <p className="review__author">
+                  <strong>{review.name}</strong>
+                  <span className="muted"> · {review.note}</span>
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="section" id="cua-hang">
+        <div className="container store">
+          <div>
+            <h2>Ghé cửa hàng</h2>
+            <dl className="store__info">
+              <dt>Địa chỉ</dt>
+              <dd>{STORE.address}</dd>
+              <dt>Giờ mở cửa</dt>
+              <dd>{STORE.hours}</dd>
+              <dt>Hotline</dt>
+              <dd>{STORE.hotline}</dd>
+            </dl>
+            <Link to="/menu" className="btn">Xem menu và đặt online</Link>
           </div>
+          <img
+            className="store__map"
+            src="/images/store-map.svg"
+            alt={`Bản đồ vị trí cửa hàng tại ${STORE.address}`}
+            loading="lazy"
+          />
         </div>
       </section>
     </>

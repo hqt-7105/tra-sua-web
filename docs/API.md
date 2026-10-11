@@ -43,7 +43,7 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
   "name": "Trà sữa truyền thống",
   "basePrice": 35000,
   "description": "Hồng trà đậm vị pha sữa béo nhẹ, công thức nhà làm.",
-  "image": null,
+  "image": "/images/drinks/ts-truyen-thong.svg",
   "isBestSeller": true,
   "isActive": true
 }

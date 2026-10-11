@@ -77,7 +77,7 @@ tra-sua-web/
 | Nhóm | Pattern | File | Phụ trách | Trạng thái |
 |---|---|---|---|---|
 | Creational | Factory Method | `server/src/patterns/creational/DrinkFactory.js` | TV1 | ⏳ Sprint 1 |
-| Creational | Singleton | `client/src/store/cartStore.js` | TV2 | ⏳ Sprint 1 |
+| Creational | Singleton | `client/src/store/cartStore.js` | TV2 | ✅ Xong ([docs](docs/patterns/singleton.md)) |
 | Creational | Builder | `server/src/patterns/creational/OrderItemBuilder.js` | TV3 | ⏳ Sprint 1 |
 | Structural | Decorator | `server/src/patterns/structural/ToppingDecorator.js` | — | ✅ Mẫu |
 | Structural | Facade | `server/src/patterns/structural/OrderFacade.js` | TV1 | ⏳ Sprint 2 |

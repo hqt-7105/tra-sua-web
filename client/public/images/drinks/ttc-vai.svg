@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fde6d6"/><stop offset="1" stop-color="#f7b994"/></linearGradient>
+    <clipPath id="cup"><path d="M125 78 L275 78 L258 262 Q200 274 142 262 Z"/></clipPath>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <circle cx="70" cy="60" r="36" fill="#ffffff" opacity=".25"/>
+  <circle cx="340" cy="240" r="52" fill="#ffffff" opacity=".18"/>
+  <ellipse cx="200" cy="270" rx="96" ry="12" fill="#000000" opacity=".08"/>
+  <rect x="214" y="18" width="14" height="120" rx="7" fill="#e86f5a" transform="rotate(14 221 78)"/>
+  <g clip-path="url(#cup)">
+    <rect x="110" y="98" width="180" height="190" fill="#f2c2c6"/>
+    <rect x="110" y="98" width="180" height="10" fill="#f8dcdf" opacity=".9"/>
+    
+    <circle cx="168" cy="210" r="14" fill="#fffaf4" stroke="#e7b9bd" stroke-width="3"/><circle cx="214" cy="180" r="14" fill="#fffaf4" stroke="#e7b9bd" stroke-width="3"/><circle cx="226" cy="236" r="14" fill="#fffaf4" stroke="#e7b9bd" stroke-width="3"/><path d="M230 112 c10 -18 34 -14 30 6 c-4 16 -26 18 -30 -6z" fill="#e57d8e"/>
+    <rect x="132" y="80" width="18" height="180" fill="#ffffff" opacity=".22"/>
+  </g>
+  <path d="M125 78 L275 78 L258 262 Q200 274 142 262 Z" fill="none" stroke="#ffffff" stroke-width="4" opacity=".85"/>
+  <rect x="119" y="70" width="162" height="12" rx="6" fill="#fffaf3" stroke="#e7d7c3" stroke-width="2"/>
+</svg>

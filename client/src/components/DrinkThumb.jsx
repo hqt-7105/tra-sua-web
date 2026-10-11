@@ -1,4 +1,4 @@
-/** Ảnh tạm khi món chưa có hình (image = null). TV2 thay bằng ảnh thật sau. */
+/** Ảnh món (image trong drinks.json); món chưa có ảnh (image = null) thì hiện biểu tượng theo danh mục. */
 const ICONS = {
   'tra-sua': '🧋',
   'tra-trai-cay': '🍑',
