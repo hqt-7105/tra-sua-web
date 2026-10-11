@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { notImplemented } from '../middlewares/errorHandler.js';
+import { HttpError, notImplemented } from '../middlewares/errorHandler.js';
+import { orderRepository } from '../repositories/orderRepository.js';
 
 const router = Router();
 
@@ -30,7 +31,30 @@ router.get('/:id/events', notImplemented('TV2'));
  *                                → 409 nếu chuyển trạng thái không hợp lệ
  * Sprint 2: sau khi chuyển thành công gọi orderEvents.notify({ type: 'STATUS_CHANGED', ... })
  */
-router.get('/:id', notImplemented('TV5'));
-router.patch('/:id/status', notImplemented('TV5'));
+const ACTIONS = ['next', 'cancel'];
+
+function findOrderOr404(id) {
+  const order = orderRepository.findById(id);
+  if (!order) throw new HttpError(404, `Không tìm thấy đơn ${id}`);
+  return order;
+}
+
+router.get('/:id', (req, res) => {
+  res.json(findOrderOr404(req.params.id));
+});
+
+router.patch('/:id/status', (req, res) => {
+  const { action } = req.body ?? {};
+  if (!ACTIONS.includes(action)) {
+    throw Object.assign(new HttpError(400, 'Thao tác không hợp lệ, chỉ nhận "next" hoặc "cancel"'), {
+      field: 'action',
+    });
+  }
+  const order = findOrderOr404(req.params.id);
+  // State của đơn tự quyết định có cho phép không (sai → InvalidTransitionError 409).
+  order[action]();
+  orderRepository.save(order);
+  res.json(order);
+});
 
 export default router;
