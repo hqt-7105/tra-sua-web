@@ -1,0 +1,7 @@
+[
+  { "code": "MAY10", "type": "percent", "value": 10, "maxDiscount": 20000, "minOrder": 50000, "expiresAt": "2026-12-31T23:59:59+07:00" },
+  { "code": "GIAM20K", "type": "fixed", "value": 20000, "minOrder": 80000, "expiresAt": "2026-12-31T23:59:59+07:00" },
+  { "code": "FREESHIP", "type": "freeship", "minOrder": 99000, "expiresAt": "2026-12-31T23:59:59+07:00" },
+  { "code": "HETHAN", "type": "fixed", "value": 10000, "minOrder": 0, "expiresAt": "2025-01-01T00:00:00+07:00" },
+  { "code": "HETLUOT", "type": "fixed", "value": 15000, "minOrder": 0, "usageLimit": 100, "usedCount": 100, "expiresAt": "2026-12-31T23:59:59+07:00" }
+]
