@@ -15,8 +15,8 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
 | POST | `/cart/price` | ⏳ S1 | TV3 |
 | GET | `/vouchers` | ✅ Xong | TV4 |
 | POST | `/vouchers/validate` | ✅ Xong (Strategy) | TV4 |
-| GET | `/orders/:id` | ⏳ S1 | TV5 |
-| PATCH | `/orders/:id/status` | ⏳ S1 | TV5 |
+| GET | `/orders/:id` | ✅ Xong (State) | TV5 |
+| PATCH | `/orders/:id/status` | ✅ Xong (State) | TV5 |
 | POST | `/orders` | ⏳ S2 (Facade) | TV1 |
 | GET | `/orders/:id/events` | ⏳ S2 (SSE) | TV2 |
 | GET | `/payments/methods` | ⏳ S2 | TV3 |

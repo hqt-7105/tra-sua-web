@@ -530,6 +530,185 @@ code {
   color: #fff;
 }
 
+/* ---------- Theo dõi đơn (TV5) ---------- */
+.steps__item.done {
+  color: var(--matcha);
+}
+
+.steps__item.done .steps__dot {
+  background: var(--matcha);
+  color: #fff;
+}
+
+.steps--cancelled .steps__item,
+.steps--cancelled .steps__item.active {
+  color: var(--brown-2);
+  font-weight: 400;
+  opacity: 0.55;
+}
+
+.steps--cancelled .steps__dot,
+.steps--cancelled .steps__item.active .steps__dot {
+  background: var(--cream-2);
+  color: var(--brown-2);
+}
+
+.order__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.order__head h1 {
+  margin: 0;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--cream-2);
+}
+
+.status-pill--pending {
+  background: #fdf0dc;
+  color: var(--caramel-dark);
+}
+
+.status-pill--preparing,
+.status-pill--delivering {
+  background: #e8f0fb;
+  color: #2f5d8c;
+}
+
+.status-pill--completed {
+  background: #eef3e6;
+  color: var(--matcha);
+}
+
+.status-pill--cancelled {
+  background: #fbe9e5;
+  color: var(--danger);
+}
+
+.panel {
+  background: var(--milk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+
+.panel--dashed {
+  border-style: dashed;
+}
+
+.panel__title {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.order__grid {
+  display: grid;
+  gap: 0 16px;
+}
+
+.order__line {
+  margin: 0 0 4px;
+}
+
+.pay--paid {
+  color: var(--matcha);
+  font-weight: 700;
+}
+
+.pay--failed {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.pay--pending {
+  color: var(--caramel-dark);
+  font-weight: 700;
+}
+
+.order-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.order-items__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.order-items__row .muted {
+  margin: 2px 0 0;
+  font-size: 0.88rem;
+}
+
+.order-items__row .price {
+  white-space: nowrap;
+}
+
+.summary {
+  margin: 12px 0 0;
+}
+
+.summary div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 0;
+}
+
+.summary dt {
+  color: var(--brown-2);
+}
+
+.summary dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.summary__total {
+  border-top: 1px solid var(--line);
+  margin-top: 6px;
+  padding-top: 8px !important;
+  font-size: 1.1rem;
+}
+
+.summary__total dt,
+.summary__total dd {
+  color: var(--brown);
+  font-weight: 800;
+}
+
+.history {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.92rem;
+}
+
+.order__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .order__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 /* ---------- Task notice (chỉ dùng khi đang phát triển) ---------- */
 .notice {
   margin: 20px 0;
