@@ -5,6 +5,9 @@
 const BASE_URL = import.meta.env.VITE_API_URL || '/api';
 const TOKEN_KEY = 'may-admin-token';
 
+/** Đường dẫn đầy đủ tới API, dùng cho EventSource (SSE) vốn không đi qua request(). */
+export const apiUrl = (path) => BASE_URL + path;
+
 /** Token đăng nhập admin (TV4 lưu sau khi đăng nhập). Bọc try/catch vì localStorage có thể bị chặn. */
 export const adminToken = {
   get() {

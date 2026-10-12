@@ -4,6 +4,7 @@ import { HttpError } from '../middlewares/errorHandler.js';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
 import { createPaymentGateway } from '../patterns/structural/PaymentAdapter.js';
 import { orderRepository } from '../repositories/orderRepository.js';
+import { orderEvents, orderEvent } from '../events.js';
 
 const router = Router();
 
@@ -28,6 +29,7 @@ router.get('/methods', (req, res) => {
  *   Route không biết MoMo hay VNPay trả về dạng gì: Adapter "dịch" mọi cổng về
  *   { orderId, success, transactionId }.
  *   success → paymentStatus PAID (BR17); thất bại/khách hủy → FAILED và đơn CANCELLED.
+ *   Đổi xong thì phát PAYMENT_UPDATED (Observer) để trang theo dõi đơn và admin tự cập nhật.
  *   Đơn đã xử lý thanh toán rồi (không còn PENDING) → trả trạng thái hiện tại, không đổi gì.
  *   → { orderId, status, paymentStatus }
  *   Lỗi: 400 chữ ký sai / gateway lạ / cổng không khớp đơn · 404 không có đơn
@@ -56,6 +58,7 @@ router.post(
         order.paymentStatus = 'FAILED';
       }
       orderRepository.save(order);
+      orderEvents.notify(orderEvent('PAYMENT_UPDATED', order));
     }
 
     res.json({ orderId: order.id, status: order.getStatus(), paymentStatus: order.paymentStatus });

@@ -1,6 +1,8 @@
 import { Router } from 'express';
-import { HttpError, notImplemented } from '../middlewares/errorHandler.js';
-import { orderRepository } from '../repositories/orderRepository.js';
+import { notImplemented } from '../middlewares/errorHandler.js';
+import { customerStream } from '../events.js';
+import { openEventStream } from '../utils/sse.js';
+import { changeOrderStatus, findOrderOr404 } from '../services/orderStatusService.js';
 
 const router = Router();
 
@@ -14,13 +16,14 @@ const router = Router();
 router.post('/', notImplemented('TV1'));
 
 /**
- * GET /api/orders/:id/events — TV2 (Sprint 2 - Observer)
- *   Server-Sent Events cho trang theo dõi đơn của khách:
- *     res.set({ 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' })
- *     const remove = customerStream.addClient(req.params.id, res);
- *     req.on('close', remove);
+ * GET /api/orders/:id/events — TV2 (Observer, SSE)
+ *   Trang theo dõi đơn của khách mở luồng này; CustomerStreamObserver chỉ đẩy
+ *   sự kiện của đúng đơn :id. Đơn không có → 404 (JSON, không mở luồng).
  */
-router.get('/:id/events', notImplemented('TV2'));
+router.get('/:id/events', (req, res) => {
+  const { id } = findOrderOr404(req.params.id);
+  openEventStream(req, res, (stream) => customerStream.addClient(id, stream));
+});
 
 /**
  * TV5 (Sprint 1 - State). Lưu đơn qua orderRepository.
@@ -29,32 +32,14 @@ router.get('/:id/events', notImplemented('TV2'));
  * PATCH /api/orders/:id/status   body { action: 'next' | 'cancel' }
  *                                → đơn sau khi chuyển trạng thái
  *                                → 409 nếu chuyển trạng thái không hợp lệ
- * Sprint 2: sau khi chuyển thành công gọi orderEvents.notify({ type: 'STATUS_CHANGED', ... })
+ *                                → phát STATUS_CHANGED (Observer, Sprint 2)
  */
-const ACTIONS = ['next', 'cancel'];
-
-function findOrderOr404(id) {
-  const order = orderRepository.findById(id);
-  if (!order) throw new HttpError(404, `Không tìm thấy đơn ${id}`);
-  return order;
-}
-
 router.get('/:id', (req, res) => {
   res.json(findOrderOr404(req.params.id));
 });
 
 router.patch('/:id/status', (req, res) => {
-  const { action } = req.body ?? {};
-  if (!ACTIONS.includes(action)) {
-    throw Object.assign(new HttpError(400, 'Thao tác không hợp lệ, chỉ nhận "next" hoặc "cancel"'), {
-      field: 'action',
-    });
-  }
-  const order = findOrderOr404(req.params.id);
-  // State của đơn tự quyết định có cho phép không (sai → InvalidTransitionError 409).
-  order[action]();
-  orderRepository.save(order);
-  res.json(order);
+  res.json(changeOrderStatus(req.params.id, req.body?.action));
 });
 
 export default router;

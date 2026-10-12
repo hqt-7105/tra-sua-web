@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { api } from '../api/client.js';
-import TaskNotice from '../components/TaskNotice.jsx';
+import { api, apiUrl } from '../api/client.js';
+import { useOrderEvents } from '../hooks/useOrderEvents.js';
+import { useToast } from '../hooks/useToast.js';
 import { Loading } from '../components/Status.jsx';
 import { formatPrice } from '../utils/format.js';
 import {
@@ -14,6 +15,26 @@ import {
 } from '../utils/orderLabels.js';
 
 const ACTION_LABELS = { next: 'Chuyển bước tiếp', cancel: 'Hủy đơn' };
+
+/** Thông báo nổi khi đơn đổi trạng thái / cổng thanh toán báo về (Observer). */
+const STATUS_MESSAGES = {
+  PREPARING: 'Đơn của bạn đang được pha chế',
+  DELIVERING: 'Đơn đang trên đường giao tới bạn',
+  COMPLETED: 'Đơn đã giao xong. Chúc bạn ngon miệng!',
+  CANCELLED: 'Đơn của bạn đã bị hủy',
+};
+const PAYMENT_MESSAGES = {
+  PAID: 'Đã nhận thanh toán. Cảm ơn bạn!',
+  FAILED: 'Thanh toán không thành công, đơn đã bị hủy',
+};
+
+function messageFor(event) {
+  if (event.type === 'STATUS_CHANGED') return STATUS_MESSAGES[event.to ?? event.status];
+  if (event.type === 'PAYMENT_UPDATED') return PAYMENT_MESSAGES[event.paymentStatus];
+  return null;
+}
+
+const isBadNews = (event) => event.paymentStatus === 'FAILED' || event.status === 'CANCELLED';
 
 function ProgressSteps({ status }) {
   const current = ORDER_STEPS.findIndex((step) => step.status === status);
@@ -50,6 +71,15 @@ export default function OrderTracking() {
   }, [id]);
 
   useEffect(load, [load]);
+
+  // Observer phía client: server đẩy sự kiện của đơn này qua SSE → tải lại đơn, không cần F5.
+  const toast = useToast();
+  const { connected } = useOrderEvents(apiUrl(`/orders/${encodeURIComponent(id)}/events`), (event) => {
+    if (event.orderId !== id) return;
+    load();
+    const message = messageFor(event);
+    if (message) toast.show(message, { type: isBadNews(event) ? 'error' : 'success' });
+  });
 
   const changeStatus = async (action) => {
     setBusy(true);
@@ -99,7 +129,12 @@ export default function OrderTracking() {
             {STATUS_LABELS[order.status]}
           </span>
         </div>
-        <p className="muted">Đặt lúc {formatDateTime(order.createdAt)}</p>
+        <p className="muted order__meta">
+          Đặt lúc {formatDateTime(order.createdAt)}
+          <span className={connected ? 'live' : 'live live--off'}>
+            {connected ? 'Tự cập nhật' : 'Đang kết nối lại...'}
+          </span>
+        </p>
 
         <ProgressSteps status={order.status} />
         {cancelled && <p className="error">Đơn đã bị hủy.</p>}
@@ -176,12 +211,6 @@ export default function OrderTracking() {
         )}
         {actionError && <p className="error" role="alert">{actionError}</p>}
 
-        <TaskNotice sprint={2} owner="TV2" task="Tự cập nhật khi đơn đổi trạng thái (Sprint 2)" pattern="Observer">
-          <ul>
-            <li>Dùng <code>useOrderEvents(`/api/orders/${'{id}'}/events`, ...)</code>: có sự kiện thì cập nhật thanh tiến trình, không cần tải lại trang</li>
-            <li>Hiện toast &quot;Đơn của bạn đang được pha chế&quot;... theo trạng thái mới, và trạng thái thanh toán khi cổng báo về</li>
-          </ul>
-        </TaskNotice>
       </div>
     </section>
   );

@@ -6,6 +6,8 @@
  *   - PATCH /api/orders/:id/status (TV5)    → STATUS_CHANGED
  *   - PATCH /api/admin/orders/:id/status    → STATUS_CHANGED
  *   - POST /api/payments/confirm (TV3)      → PAYMENT_UPDATED
+ *
+ * Ai nhận: nhật ký (orderLog), khách đang xem đơn (customerStream), màn hình admin (adminFeed).
  */
 import {
   OrderSubject,
@@ -19,7 +21,19 @@ export const orderLog = new OrderLogObserver();
 export const customerStream = new CustomerStreamObserver();
 export const adminFeed = new AdminFeedObserver();
 
-// TODO(TV2): bỏ comment khi đã cài attach()
-// orderEvents.attach(orderLog);
-// orderEvents.attach(customerStream);
-// orderEvents.attach(adminFeed);
+orderEvents.attach(orderLog);
+orderEvents.attach(customerStream);
+orderEvents.attach(adminFeed);
+
+/**
+ * Dựng sự kiện từ đơn hàng theo đúng định dạng trong OrderEvents.js.
+ *   orderEvents.notify(orderEvent('STATUS_CHANGED', order, { from: 'PENDING', to: 'PREPARING' }))
+ */
+export const orderEvent = (type, order, extra = {}) => ({
+  type,
+  orderId: order.id,
+  status: order.getStatus(),
+  paymentStatus: order.paymentStatus,
+  ...extra,
+  at: new Date().toISOString(),
+});
