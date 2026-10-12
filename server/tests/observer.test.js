@@ -1,4 +1,4 @@
-// Observer — TV2 (Sprint 2). Khi cài xong, XÓA `{ todo: 'TV2-S2' }` ở từng test.
+// Observer — TV2 (Sprint 2). Test chấp nhận đã bật toàn bộ.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
@@ -9,7 +9,6 @@ import {
   AdminFeedObserver,
 } from '../src/patterns/behavioral/OrderEvents.js';
 
-const TODO = { todo: 'TV2-S2' };
 const event = (orderId, type = 'STATUS_CHANGED') => ({
   type,
   orderId,
@@ -38,7 +37,7 @@ const fakeResponse = () => ({
   },
 });
 
-test('notify gọi mọi observer theo thứ tự đăng ký', TODO, () => {
+test('notify gọi mọi observer theo thứ tự đăng ký', () => {
   const calls = [];
   const subject = new OrderSubject();
   subject.attach(new Spy('a', calls));
@@ -47,7 +46,7 @@ test('notify gọi mọi observer theo thứ tự đăng ký', TODO, () => {
   assert.deepEqual(calls, ['a:DH1', 'b:DH1']);
 });
 
-test('đăng ký trùng thì chỉ nhận một lần; detach thì thôi nhận', TODO, () => {
+test('đăng ký trùng thì chỉ nhận một lần; detach thì thôi nhận', () => {
   const calls = [];
   const subject = new OrderSubject();
   const spy = new Spy('a', calls);
@@ -59,7 +58,7 @@ test('đăng ký trùng thì chỉ nhận một lần; detach thì thôi nhận'
   assert.deepEqual(calls, ['a:DH1']);
 });
 
-test('một observer lỗi không làm hỏng các observer khác', TODO, (t) => {
+test('một observer lỗi không làm hỏng các observer khác', (t) => {
   t.mock.method(console, 'error', () => {});
   const calls = [];
   const subject = new OrderSubject();
@@ -69,7 +68,7 @@ test('một observer lỗi không làm hỏng các observer khác', TODO, (t) =>
   assert.deepEqual(calls, ['b:DH1']);
 });
 
-test('OrderLogObserver lưu sự kiện, lọc theo đơn, trả bản sao', TODO, () => {
+test('OrderLogObserver lưu sự kiện, lọc theo đơn, trả bản sao', () => {
   const log = new OrderLogObserver();
   log.update(event('DH1'));
   log.update(event('DH2'));
@@ -80,7 +79,7 @@ test('OrderLogObserver lưu sự kiện, lọc theo đơn, trả bản sao', TOD
   assert.equal(log.getLogs().length, 3);
 });
 
-test('CustomerStreamObserver chỉ gửi SSE cho khách đang xem đúng đơn', TODO, () => {
+test('CustomerStreamObserver chỉ gửi SSE cho khách đang xem đúng đơn', () => {
   const stream = new CustomerStreamObserver();
   const resA = fakeResponse();
   const resB = fakeResponse();
@@ -97,7 +96,7 @@ test('CustomerStreamObserver chỉ gửi SSE cho khách đang xem đúng đơn',
   assert.equal(resA.chunks.length, 1);
 });
 
-test('AdminFeedObserver gửi cho tất cả màn hình admin', TODO, () => {
+test('AdminFeedObserver gửi cho tất cả màn hình admin', () => {
   const feed = new AdminFeedObserver();
   const res1 = fakeResponse();
   const res2 = fakeResponse();

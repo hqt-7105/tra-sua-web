@@ -18,7 +18,7 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
 | GET | `/orders/:id` | ✅ Xong (State) | TV5 |
 | PATCH | `/orders/:id/status` | ✅ Xong (State) | TV5 |
 | POST | `/orders` | ⏳ S2 (Facade) | TV1 |
-| GET | `/orders/:id/events` | ⏳ S2 (SSE) | TV2 |
+| GET | `/orders/:id/events` | ✅ Xong (Observer, SSE) | TV2 |
 | GET | `/payments/methods` | ✅ Xong | TV3 |
 | POST | `/payments/confirm` | ✅ Xong (Adapter) | TV3 |
 | POST | `/admin/login`, `/admin/logout` · GET `/admin/me` | ⏳ S2 | TV4 |
@@ -27,7 +27,7 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
 | GET | `/admin/audit-log` | ⏳ S2 | TV4 |
 | GET | `/admin/orders?status=` | ⏳ S2 | TV5 |
 | PATCH | `/admin/orders/:id/status` | ⏳ S2 | TV5 |
-| GET | `/admin/events` | ⏳ S2 (SSE) | TV2 |
+| GET | `/admin/events` | ✅ Xong (Observer, SSE) | TV2 |
 
 ⏳ = đang trả `501` kèm `owner` (người phụ trách).
 
@@ -134,6 +134,7 @@ Lỗi: `404` không có đơn.
 Request: `{ "action": "next" }` hoặc `{ "action": "cancel" }`
 Response `200`: đơn sau khi chuyển (cùng dạng `GET`).
 Lỗi: `400` action lạ · `404` không có đơn · `409` chuyển trạng thái không hợp lệ (ví dụ hủy đơn đang giao).
+Thành công thì phát sự kiện `STATUS_CHANGED` (Sprint 2, Observer).
 
 ---
 
@@ -174,6 +175,7 @@ data: {"type":"STATUS_CHANGED","orderId":"DH004","status":"PREPARING","from":"PE
 
 ```
 `type` ∈ `ORDER_CREATED` | `STATUS_CHANGED` | `PAYMENT_UPDATED`. Server gửi `: ping` mỗi 25 giây.
+`PAYMENT_UPDATED` có `status` và `paymentStatus` mới (khách hủy giao dịch → `CANCELLED` / `FAILED`). Đơn không có → `404` JSON, không mở luồng.
 
 ### `GET /payments/methods` — TV3
 ```json

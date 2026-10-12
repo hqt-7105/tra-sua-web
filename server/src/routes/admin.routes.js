@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { notImplemented } from '../middlewares/errorHandler.js';
 import { requireAuth } from '../middlewares/auth.js';
+import { adminFeed } from '../events.js';
+import { openEventStream } from '../utils/sse.js';
 
 const router = Router();
 const staff = requireAuth('admin', 'staff');
@@ -33,7 +35,10 @@ router.get('/orders', staff, notImplemented('TV5'));
 router.patch('/orders/:id/status', staff, notImplemented('TV5'));
 
 // ---------------------------------------------------------------- TV2 (Sprint 2)
-// SSE: luồng sự kiện mọi đơn cho màn hình admin (AdminFeedObserver)
-router.get('/events', staff, notImplemented('TV2'));
+// SSE: luồng sự kiện mọi đơn cho màn hình admin (AdminFeedObserver).
+// EventSource không gửi được header nên token đi qua ?token=... (requireAuth đọc cả hai).
+router.get('/events', staff, (req, res) => {
+  openEventStream(req, res, (stream) => adminFeed.addClient(stream));
+});
 
 export default router;
