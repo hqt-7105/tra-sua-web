@@ -82,7 +82,7 @@ tra-sua-web/
 | Structural | Decorator | `server/src/patterns/structural/ToppingDecorator.js` | — | ✅ Mẫu |
 | Structural | Facade | `server/src/patterns/structural/OrderFacade.js` | TV1 | ⏳ Sprint 2 |
 | Structural | Adapter | `server/src/patterns/structural/PaymentAdapter.js` | TV3 | ✅ Xong ([docs](docs/patterns/adapter.md)) |
-| Structural | Proxy | `server/src/patterns/structural/MenuServiceProxy.js` | TV4 | ⏳ Sprint 2 |
+| Structural | Proxy | `server/src/patterns/structural/MenuServiceProxy.js` | TV4 | ✅ Xong ([docs](docs/patterns/proxy.md)) |
 | Behavioral | Strategy | `server/src/patterns/behavioral/DiscountStrategy.js` | TV4 | ✅ Xong ([docs](docs/patterns/strategy.md)) |
 | Behavioral | State | `server/src/patterns/behavioral/OrderState.js` | TV5 | ✅ Xong ([docs](docs/patterns/state.md)) |
 | Behavioral | Observer | `server/src/patterns/behavioral/OrderEvents.js` | TV2 | ✅ Xong ([docs](docs/patterns/observer.md)) |
@@ -97,7 +97,7 @@ tra-sua-web/
 
 Trang quản trị: http://localhost:5173/admin
 
-> ⚠️ Tới khi TV4 xong Sprint 2, `server/src/middlewares/auth.js` đang ở chế độ tạm, cho mọi request vào `/api/admin`.
+> 🔒 `/api/admin/*` kiểm tra token thật (`server/src/middlewares/auth.js`): chưa đăng nhập → 401, nhân viên sửa menu → 403. Phiên hết hạn sau 8 giờ.
 
 ## Bắt đầu từ đâu?
 

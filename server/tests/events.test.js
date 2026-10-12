@@ -18,9 +18,9 @@ after(async () => {
 });
 
 /** Mở luồng SSE, next() trả sự kiện `event: order` kế tiếp (bỏ qua retry/ping). */
-async function openStream(path) {
+async function openStream(path, headers = {}) {
   const controller = new AbortController();
-  const res = await fetch(api.baseUrl + path, { signal: controller.signal });
+  const res = await fetch(api.baseUrl + path, { signal: controller.signal, headers });
   const reader = res.body?.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
@@ -72,8 +72,19 @@ test('GET /orders/:id/events với đơn không có trả 404', async () => {
   assert.match(body.error, /Không tìm thấy đơn/);
 });
 
+test('GET /admin/events cần đăng nhập; token qua ?token= khi mở bằng EventSource', async () => {
+  assert.equal((await api.get('/admin/events')).status, 401);
+  const { Authorization } = await api.loginAs('staff');
+  const token = Authorization.replace('Bearer ', '');
+  const viaQuery = await openStream(`/admin/events?token=${token}`, { Accept: 'text/event-stream' });
+  assert.equal(viaQuery.res.status, 200);
+  viaQuery.close();
+  // Request thường không được dùng ?token (tránh lộ token trong URL)
+  assert.equal((await api.get(`/admin/orders?token=${token}`)).status, 401);
+});
+
 test('GET /admin/events nhận sự kiện của mọi đơn, kể cả PAYMENT_UPDATED', async () => {
-  const feed = await openStream('/admin/events');
+  const feed = await openStream('/admin/events', await api.loginAs('staff'));
   assert.equal(feed.res.status, 200);
 
   const order = orderRepository.save(

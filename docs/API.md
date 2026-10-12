@@ -21,10 +21,10 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
 | GET | `/orders/:id/events` | ✅ Xong (Observer, SSE) | TV2 |
 | GET | `/payments/methods` | ✅ Xong | TV3 |
 | POST | `/payments/confirm` | ✅ Xong (Adapter) | TV3 |
-| POST | `/admin/login`, `/admin/logout` · GET `/admin/me` | ⏳ S2 | TV4 |
-| GET/POST | `/admin/drinks`, `/admin/toppings` | ⏳ S2 (Proxy) | TV4 |
-| PUT/DELETE | `/admin/drinks/:id`, `/admin/toppings/:id` | ⏳ S2 (Proxy) | TV4 |
-| GET | `/admin/audit-log` | ⏳ S2 | TV4 |
+| POST | `/admin/login`, `/admin/logout` · GET `/admin/me` | ✅ Xong | TV4 |
+| GET/POST | `/admin/drinks`, `/admin/toppings` | ✅ Xong (Proxy) | TV4 |
+| PUT/DELETE | `/admin/drinks/:id`, `/admin/toppings/:id` | ✅ Xong (Proxy) | TV4 |
+| GET | `/admin/audit-log` | ✅ Xong | TV4 |
 | GET | `/admin/orders?status=` | ⏳ S2 | TV5 |
 | PATCH | `/admin/orders/:id/status` | ⏳ S2 | TV5 |
 | GET | `/admin/events` | ✅ Xong (Observer, SSE) | TV2 |
@@ -195,7 +195,10 @@ Lỗi: `400` chữ ký sai hoặc gateway lạ (thiếu `gateway` thì kèm `fie
 ### `POST /admin/login` — TV4
 Request `{ "email": "admin@may.vn", "password": "admin123" }`
 Response `200`: `{ "token": "9f1c...", "user": { "id": 1, "email": "admin@may.vn", "name": "Quản trị viên", "role": "admin" } }`
-Lỗi `401` "Email hoặc mật khẩu không đúng".
+Lỗi `401` "Email hoặc mật khẩu không đúng" (sai email hay sai mật khẩu đều cùng thông báo). Email không phân biệt hoa thường.
+
+`POST /admin/logout` (kèm token) → `204`, token hết hiệu lực. `GET /admin/me` → `{ id, email, name, role }`.
+Mọi route `/admin/*` khác: thiếu/sai/hết hạn token (8 giờ) → `401` "Vui lòng đăng nhập"; sai vai trò → `403` "Bạn không có quyền thực hiện thao tác này".
 
 ### `/admin/drinks`, `/admin/toppings` — TV4 (Proxy)
 | Method | Endpoint | Body | Quyền |
@@ -207,6 +210,9 @@ Lỗi `401` "Email hoặc mật khẩu không đúng".
 | GET | `/admin/audit-log` | — | admin |
 
 Topping tương tự với `{ name, price }`. Lỗi: `401` chưa đăng nhập · `403` sai quyền · `400` dữ liệu sai (BR19) · `404` không có.
+`400` kèm `field`: `name` (rỗng), `basePrice`/`price` (không phải số nguyên ≥ 0), `categoryId` (không tồn tại), `description`, `image`, `isBestSeller`, `isActive`.
+Món/topping mới có `id` tự sinh từ tên (`Trà sữa khoai môn` → `tra-sua-khoai-mon`), `isActive: true`. `PUT` với `{ "isActive": true }` để mở bán lại.
+Thành công trả bản ghi sau khi đổi (`200`). Nhật ký mới nhất trước.
 Nhật ký: `[{ "at": "...", "email": "admin@may.vn", "action": "updateDrink", "targetId": "ts-truyen-thong" }]`
 
 ### `/admin/orders` — TV5
