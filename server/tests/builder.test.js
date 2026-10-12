@@ -77,6 +77,8 @@ test('quy tắc của từng loại đồ uống (Factory Method) được kiể
   );
   const item = new OrderItemBuilder().setDrink(iceBlended()).addTopping(pudding).build();
   assert.equal(item.unitPrice, 56000);
+  assert.equal(item.ice, null, 'món không chỉnh đá thì ice = null (không áp dụng)');
+  assert.equal(item.sugar, 100);
 });
 
 test('toJSON trả đúng các trường của hợp đồng, topping lấy từ Decorator', () => {

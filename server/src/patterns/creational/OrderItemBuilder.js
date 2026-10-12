@@ -37,6 +37,8 @@
  *   OrderItem.unitPrice  = giá drink sau khi bọc topping (dùng addToppings của
  *                          Decorator có sẵn) + phụ thu size (options.json)
  *   OrderItem.totalPrice = unitPrice * quantity
+ *   Đồ uống không cho chỉnh đường/đá (getCustomization) → OrderItem.sugar/ice = null
+ *     (không áp dụng); chỉ nhận giá trị mặc định, giá trị khác → throw Error
  *   build() khi chưa setDrink → throw Error
  *   Giá trị không hợp lệ (size 'XL', sugar 40, quantity 0) → throw Error
  *     (cụ thể là InvalidOrderItemError, có `field` cho biết thuộc tính nào sai)
@@ -164,7 +166,7 @@ export class OrderItemBuilder {
   build() {
     const { drink, size, sugar, ice, toppings, quantity, note } = this.state;
     if (!drink) fail('drink', 'Chưa chọn đồ uống');
-    this.#checkCustomization();
+    const rules = this.#checkCustomization();
 
     // Decorator cộng giá và nối mô tả topping; Builder chỉ cộng thêm phụ thu size.
     const decorated = addToppings(drink, toppings);
@@ -175,8 +177,9 @@ export class OrderItemBuilder {
       drinkId: drink.getId(),
       description: decorated.getDescription(),
       size,
-      sugar,
-      ice,
+      // Món không chỉnh được đường/đá (ví dụ đá xay) ghi null = không áp dụng.
+      sugar: rules.allowSugar ? sugar : null,
+      ice: rules.allowIce ? ice : null,
       toppings: Object.freeze(decorated.getToppings().map((t) => Object.freeze({ ...t }))),
       quantity,
       note,
@@ -203,5 +206,6 @@ export class OrderItemBuilder {
     if (!rules.allowToppings && toppings.length > 0) fail('toppings', `${name} không thêm được topping`);
     if (!rules.allowSugar && sugar !== defaults.sugar) fail('sugar', `${name} không chỉnh được mức đường`);
     if (!rules.allowIce && ice !== defaults.ice) fail('ice', `${name} không chỉnh được mức đá`);
+    return rules;
   }
 }

@@ -25,9 +25,14 @@ export const PAYMENT_METHOD_LABELS = {
   VNPAY: 'VNPay',
 };
 
-/** { size: 'L', sugar: 50, ice: 70, note } → "Size L · 50% đường · 70% đá · Ghi chú: ít ngọt" */
+/**
+ * { size: 'L', sugar: 50, ice: 70, note } → "Size L · 50% đường · 70% đá · Ghi chú: ít ngọt"
+ * Món không chỉnh được đường/đá (ví dụ đá xay) có giá trị null → bỏ phần đó.
+ */
 export function formatItemOptions({ size, sugar, ice, note }) {
-  const parts = [`Size ${size}`, `${sugar}% đường`, `${ice}% đá`];
+  const parts = [`Size ${size}`];
+  if (sugar != null) parts.push(`${sugar}% đường`);
+  if (ice != null) parts.push(`${ice}% đá`);
   if (note) parts.push(`Ghi chú: ${note}`);
   return parts.join(' · ');
 }

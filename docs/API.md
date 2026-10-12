@@ -88,6 +88,7 @@ Response `200`:
 Lỗi: `404` món/topping không tồn tại · `400` size, đường, đá, số lượng không hợp lệ.
 `400` luôn kèm `field` (`drinkId`, `size`, `sugar`, `ice`, `toppingIds`, `quantity`, `note`). Số lượng 1–20 (BR13), ghi chú tối đa 200 ký tự.
 Loại đồ uống không cho phép cũng trả `400`: cà phê thêm topping (`toppingIds`), đá xay chỉnh mức đá (`ice`), xem `customization` ở `GET /drinks/:id`.
+Món không chỉnh được mức đá (đá xay) trả `"ice": null` (không áp dụng); gửi lên `ice` mặc định (100) hoặc bỏ trống đều được.
 Thiếu `size`/`sugar`/`ice`/`quantity`/`note` thì dùng mặc định (BR03). Giá luôn do server tính, mọi trường giá gửi lên bị bỏ qua.
 
 ### `POST /vouchers/validate` — TV4

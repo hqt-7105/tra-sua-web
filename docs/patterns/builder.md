@@ -89,7 +89,7 @@ const decorated = addToppings(drink, toppings);            // Decorator: cộng 
 const unitPrice = decorated.getPrice() + sizeExtra;        // Builder chỉ cộng phụ thu size (BR02)
 ```
 
-`drink` truyền vào `setDrink()` do Factory Method tạo (`createDrinkFromData`), nên là `MilkTea`, `Coffee`... và tự khai báo `getCustomization()`. `build()` đọc quy tắc đó: thêm topping cho cà phê hoặc chỉnh đá cho đá xay sẽ bị từ chối. Lỗi là `InvalidOrderItemError` có `field`, Director đổi thành `HttpError(400)` kèm tên ô trong request (`toppingIds`, `ice`...).
+`drink` truyền vào `setDrink()` do Factory Method tạo (`createDrinkFromData`), nên là `MilkTea`, `Coffee`... và tự khai báo `getCustomization()`. `build()` đọc quy tắc đó: thêm topping cho cà phê hoặc chỉnh đá cho đá xay sẽ bị từ chối. Thuộc tính không áp dụng được ghi `null` (đá xay có `ice: null`), nên giỏ hàng và trang đơn không hiện "100% đá" cho món đá xay. Lỗi là `InvalidOrderItemError` có `field`, Director đổi thành `HttpError(400)` kèm tên ô trong request (`toppingIds`, `ice`...).
 
 ## Luồng xử lý `POST /api/cart/price`
 

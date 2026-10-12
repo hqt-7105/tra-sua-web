@@ -95,6 +95,11 @@ test('quy tắc riêng của loại đồ uống: cà phê không thêm topping,
   const ok = await price({ drinkId: 'dx-socola', size: 'L', sugar: 50, toppingIds: ['kem-cheese'] });
   assert.equal(ok.status, 200);
   assert.equal(ok.body.unitPrice, 49000 + 6000 + 10000);
+  assert.equal(ok.body.ice, null, 'đá xay không áp dụng mức đá');
+
+  const iceDefault = await price({ drinkId: 'dx-socola', ice: 100 });
+  assert.equal(iceDefault.status, 200, 'gửi mức đá mặc định vẫn được nhận');
+  assert.equal(iceDefault.body.ice, null);
 });
 
 test('createOrderItem trả OrderItem dùng được cho OrderFacade (Sprint 2)', () => {
