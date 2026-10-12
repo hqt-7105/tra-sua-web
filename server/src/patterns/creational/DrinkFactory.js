@@ -1,30 +1,52 @@
 /**
  * ============================================================================
- * PATTERN: Factory Method (Creational) — PHỤ TRÁCH: TV1   [Sprint 1 - CHƯA LÀM]
+ * PATTERN: Factory Method (Creational) — PHỤ TRÁCH: TV1
  * ============================================================================
  * Vấn đề:
  *   Mỗi loại đồ uống có quy tắc riêng (ví dụ: đá xay không chỉnh mức đá,
  *   cà phê không thêm trân châu). Route/service không nên tự `new` đúng lớp.
  *
- * Cấu trúc GoF cần cài:
- *   Product          = Drink                         (src/domain/Drink.js, có sẵn)
+ * Giải pháp:
+ *   Mỗi loại đồ uống có một Creator riêng. Lớp DrinkCreator giữ phần chung
+ *   (kiểm tra dữ liệu, bảo đảm kết quả là Drink) trong create(), còn việc
+ *   "tạo lớp nào" để lớp con quyết định qua factory method createDrink().
+ *   Nơi dùng chỉ gọi createDrinkFromData(data), không biết tới MilkTea hay
+ *   Coffee. Thêm loại mới = thêm 1 Product + 1 Creator + 1 dòng đăng ký,
+ *   không sửa code đang chạy.
+ *
+ * Cấu trúc GoF:
+ *   Product          = Drink                         (src/domain/Drink.js)
  *   ConcreteProduct  = MilkTea, FruitTea, Coffee, IceBlended
- *                      → tạo trong src/domain/drinks/, kế thừa BasicDrink
- *   Creator          = DrinkCreator (lớp dưới đây, có factory method createDrink)
+ *                      (src/domain/drinks/, kế thừa BasicDrink, mỗi lớp tự
+ *                       khai báo getCategoryName() và getCustomization())
+ *   Creator          = DrinkCreator (factory method createDrink, thao tác create)
  *   ConcreteCreator  = MilkTeaCreator, FruitTeaCreator, CoffeeCreator, IceBlendedCreator
+ *   Client           = route GET /api/drinks, dịch vụ dựng dòng món (Builder)
  *
  * LƯU Ý: Một hàm switch-case duy nhất là "Simple Factory", KHÔNG phải
- * Factory Method của GoF. Hãy để mỗi ConcreteCreator override createDrink().
+ * Factory Method của GoF. Ở đây mỗi ConcreteCreator override createDrink().
  *
  * Hợp đồng (các phần khác của dự án sẽ gọi đúng như sau):
  *   createDrinkFromData(drinkData)  → instance của lớp con Drink theo categoryId
  *     drinkData: bản ghi trong src/data/drinks.json
  *     categoryId không hỗ trợ → throw Error
  *
- * Test chấp nhận: tests/factory.test.js (bỏ `todo` khi làm xong)
+ * Ví dụ sử dụng:
+ *   const drink = createDrinkFromData({ id: 'cf-muoi', categoryId: 'ca-phe',
+ *                                       name: 'Cà phê muối', basePrice: 35000 });
+ *   drink.constructor.name;              // 'Coffee'
+ *   drink.getCategoryName();             // 'Cà phê'
+ *   drink.getCustomization();            // { allowToppings: false, allowSugar: true, allowIce: true }
+ *   new DrinkCreator().createDrink(data) // Error: Creator gốc không tự tạo
+ *
+ * Test chấp nhận: tests/factory.test.js
  * ============================================================================
  */
-// import { MilkTea } from '../../domain/drinks/MilkTea.js';
+import { Drink } from '../../domain/Drink.js';
+import { MilkTea } from '../../domain/drinks/MilkTea.js';
+import { FruitTea } from '../../domain/drinks/FruitTea.js';
+import { Coffee } from '../../domain/drinks/Coffee.js';
+import { IceBlended } from '../../domain/drinks/IceBlended.js';
 
 /** Creator trừu tượng */
 export class DrinkCreator {
@@ -35,31 +57,56 @@ export class DrinkCreator {
    */
   // eslint-disable-next-line no-unused-vars
   createDrink(drinkData) {
-    throw new Error(`TODO(TV1): ${this.constructor.name} chưa override createDrink()`);
+    throw new Error(`${this.constructor.name} phải override createDrink()`);
   }
 
-  /**
-   * Thao tác dùng factory method (lớp con không cần sửa).
-   * TODO(TV1): kiểm tra dữ liệu đầu vào, gọi createDrink(), đảm bảo kết quả là Drink.
-   */
+  /** Thao tác dùng factory method (lớp con không cần sửa). */
   create(drinkData) {
-    return this.createDrink(drinkData);
+    if (!drinkData || typeof drinkData !== 'object') {
+      throw new TypeError('Thiếu dữ liệu đồ uống');
+    }
+    const drink = this.createDrink(drinkData);
+    if (!(drink instanceof Drink)) {
+      throw new TypeError(`${this.constructor.name}.createDrink() phải trả về một Drink`);
+    }
+    return drink;
   }
 }
 
-// TODO(TV1): class MilkTeaCreator extends DrinkCreator { createDrink(data) { return new MilkTea(data); } }
-// TODO(TV1): FruitTeaCreator, CoffeeCreator, IceBlendedCreator
+export class MilkTeaCreator extends DrinkCreator {
+  createDrink(drinkData) {
+    return new MilkTea(drinkData);
+  }
+}
+
+export class FruitTeaCreator extends DrinkCreator {
+  createDrink(drinkData) {
+    return new FruitTea(drinkData);
+  }
+}
+
+export class CoffeeCreator extends DrinkCreator {
+  createDrink(drinkData) {
+    return new Coffee(drinkData);
+  }
+}
+
+export class IceBlendedCreator extends DrinkCreator {
+  createDrink(drinkData) {
+    return new IceBlended(drinkData);
+  }
+}
 
 /** Bảng ánh xạ categoryId → ConcreteCreator */
-const creators = {
-  // 'tra-sua': new MilkTeaCreator(),
-  // 'tra-trai-cay': new FruitTeaCreator(),
-  // 'ca-phe': new CoffeeCreator(),
-  // 'da-xay': new IceBlendedCreator(),
-};
+const creators = new Map([
+  ['tra-sua', new MilkTeaCreator()],
+  ['tra-trai-cay', new FruitTeaCreator()],
+  ['ca-phe', new CoffeeCreator()],
+  ['da-xay', new IceBlendedCreator()],
+]);
 
 export function createDrinkFromData(drinkData) {
-  const creator = creators[drinkData?.categoryId];
+  const creator = creators.get(drinkData?.categoryId);
   if (!creator) {
     throw new Error(`Không hỗ trợ loại đồ uống: ${drinkData?.categoryId}`);
   }
