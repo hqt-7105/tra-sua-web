@@ -1,4 +1,4 @@
-// Adapter — TV3 (Sprint 2). Khi cài xong, XÓA `{ todo: 'TV3-S2' }` ở từng test.
+// Adapter — TV3 (Sprint 2). Test chấp nhận đã bật toàn bộ.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
@@ -9,11 +9,10 @@ import {
   createPaymentGateway,
 } from '../src/patterns/structural/PaymentAdapter.js';
 
-const TODO = { todo: 'TV3-S2' };
 const order = { id: 'DH100', total: 47000 };
 const queryOf = (url) => Object.fromEntries(new URL(url, 'http://localhost').searchParams);
 
-test('mọi adapter đều là PaymentGateway và báo đúng phương thức', TODO, () => {
+test('mọi adapter đều là PaymentGateway và báo đúng phương thức', () => {
   for (const [Adapter, method] of [
     [CodAdapter, 'COD'],
     [MomoAdapter, 'MOMO'],
@@ -25,14 +24,14 @@ test('mọi adapter đều là PaymentGateway và báo đúng phương thức', 
   }
 });
 
-test('COD: chưa thu tiền, không chuyển trang', TODO, async () => {
+test('COD: chưa thu tiền, không chuyển trang', async () => {
   const result = await new CodAdapter().pay(order);
   assert.equal(result.method, 'COD');
   assert.equal(result.status, 'UNPAID');
   assert.equal(result.redirectUrl, null);
 });
 
-test('MoMo: thành công thì PENDING kèm link thanh toán', TODO, async () => {
+test('MoMo: thành công thì PENDING kèm link thanh toán', async () => {
   const result = await new MomoAdapter().pay(order);
   assert.equal(result.status, 'PENDING');
   const params = queryOf(result.redirectUrl);
@@ -40,13 +39,13 @@ test('MoMo: thành công thì PENDING kèm link thanh toán', TODO, async () => 
   assert.equal(params.amount, '47000');
 });
 
-test('VNPay: adapter tự nhân 100 số tiền', TODO, async () => {
+test('VNPay: adapter tự nhân 100 số tiền', async () => {
   const result = await new VnPayAdapter().pay(order);
   assert.equal(result.status, 'PENDING');
   assert.equal(queryOf(result.redirectUrl).vnp_Amount, '4700000');
 });
 
-test('lỗi từ cổng được dịch thành FAILED, pay() không ném lỗi', TODO, async () => {
+test('lỗi từ cổng được dịch thành FAILED, pay() không ném lỗi', async () => {
   const momo = await new MomoAdapter().pay({ id: 'DH101', total: 500 });
   assert.equal(momo.status, 'FAILED');
   assert.match(momo.message, /Số tiền/);
@@ -55,7 +54,7 @@ test('lỗi từ cổng được dịch thành FAILED, pay() không ném lỗi',
   assert.ok(vnpay.message);
 });
 
-test('MoMo verify: dịch resultCode về { orderId, success, transactionId }', TODO, async () => {
+test('MoMo verify: dịch resultCode về { orderId, success, transactionId }', async () => {
   const momo = new MomoAdapter();
   const params = queryOf((await momo.pay(order)).redirectUrl);
   assert.deepEqual(await momo.verify({ ...params, resultCode: '0', transId: 'T1' }), {
@@ -67,7 +66,7 @@ test('MoMo verify: dịch resultCode về { orderId, success, transactionId }', 
   await assert.rejects(momo.verify({ ...params, amount: '1000', resultCode: '0' }), { status: 400 });
 });
 
-test('VNPay verify: dịch vnp_ResponseCode về cùng định dạng', TODO, async () => {
+test('VNPay verify: dịch vnp_ResponseCode về cùng định dạng', async () => {
   const vnpay = new VnPayAdapter();
   const params = queryOf((await vnpay.pay(order)).redirectUrl);
   assert.deepEqual(
@@ -80,11 +79,11 @@ test('VNPay verify: dịch vnp_ResponseCode về cùng định dạng', TODO, as
   });
 });
 
-test('COD không có callback để verify', TODO, async () => {
+test('COD không có callback để verify', async () => {
   await assert.rejects(new CodAdapter().verify({}), { status: 400 });
 });
 
-test('createPaymentGateway chọn đúng adapter, phương thức lạ thì báo lỗi 400', TODO, () => {
+test('createPaymentGateway chọn đúng adapter, phương thức lạ thì báo lỗi 400', () => {
   assert.ok(createPaymentGateway('COD') instanceof CodAdapter);
   assert.ok(createPaymentGateway('MOMO') instanceof MomoAdapter);
   assert.ok(createPaymentGateway('VNPAY') instanceof VnPayAdapter);

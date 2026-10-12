@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import TaskNotice from '../components/TaskNotice.jsx';
+import PaymentMethodPicker from '../components/PaymentMethodPicker.jsx';
 
 /** Trang đặt hàng — Sprint 2 */
 export default function Checkout() {
+  const [paymentMethod, setPaymentMethod] = useState('COD');
+
   return (
     <section className="section">
       <div className="container narrow">
@@ -18,12 +22,7 @@ export default function Checkout() {
           </ul>
         </TaskNotice>
 
-        <TaskNotice sprint={2} owner="TV3" task="Chọn phương thức thanh toán (PaymentMethodPicker)" pattern="Adapter">
-          <ul>
-            <li>Component <code>src/components/PaymentMethodPicker.jsx</code>, lấy danh sách từ <code>GET /api/payments/methods</code></li>
-            <li>3 lựa chọn dạng thẻ: Thanh toán khi nhận hàng, Ví MoMo, VNPay; mặc định COD</li>
-          </ul>
-        </TaskNotice>
+        <PaymentMethodPicker value={paymentMethod} onChange={setPaymentMethod} />
       </div>
     </section>
   );

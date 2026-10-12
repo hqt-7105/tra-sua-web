@@ -19,8 +19,8 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
 | PATCH | `/orders/:id/status` | ✅ Xong (State) | TV5 |
 | POST | `/orders` | ⏳ S2 (Facade) | TV1 |
 | GET | `/orders/:id/events` | ⏳ S2 (SSE) | TV2 |
-| GET | `/payments/methods` | ⏳ S2 | TV3 |
-| POST | `/payments/confirm` | ⏳ S2 (Adapter) | TV3 |
+| GET | `/payments/methods` | ✅ Xong | TV3 |
+| POST | `/payments/confirm` | ✅ Xong (Adapter) | TV3 |
 | POST | `/admin/login`, `/admin/logout` · GET `/admin/me` | ⏳ S2 | TV4 |
 | GET/POST | `/admin/drinks`, `/admin/toppings` | ⏳ S2 (Proxy) | TV4 |
 | PUT/DELETE | `/admin/drinks/:id`, `/admin/toppings/:id` | ⏳ S2 (Proxy) | TV4 |
@@ -187,7 +187,8 @@ Request (trang `/payment/mock` gửi lên toàn bộ query đã nhận, thêm k�
 ```
 Response `200`: `{ "orderId": "DH004", "status": "PENDING", "paymentStatus": "PAID" }`
 Khách hủy (`resultCode=1006` / `vnp_ResponseCode=24`) → `{ "status": "CANCELLED", "paymentStatus": "FAILED" }`.
-Lỗi: `400` chữ ký sai hoặc gateway lạ · `404` không có đơn.
+Lỗi: `400` chữ ký sai hoặc gateway lạ (thiếu `gateway` thì kèm `field: "gateway"`) · `400` cổng không khớp phương thức của đơn · `404` không có đơn.
+Đơn đã xử lý thanh toán rồi (không còn `PENDING`) → `200` trả trạng thái hiện tại, không đổi gì (bấm lại nút ở cổng giả không làm hủy đơn đã trả tiền).
 
 ### `POST /admin/login` — TV4
 Request `{ "email": "admin@may.vn", "password": "admin123" }`
