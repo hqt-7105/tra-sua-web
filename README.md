@@ -28,6 +28,7 @@ Mở http://localhost:5173. Kiểm tra API: http://localhost:3001/api/health
 | `npm run dev:server` / `npm run dev:client` | Chạy riêng từng phần |
 | `npm test` | Chạy toàn bộ test |
 | `npm test -w server` | Chỉ test backend |
+| `npm run test:acceptance` | Chỉ chạy test nghiệm thu theo 9 tiêu chí (DAC_TA mục 10) |
 | `npm run build` | Build frontend ra `client/dist` |
 | `FAKE_HOUR=23 npm run dev` | Giả lập giờ để thử "cửa hàng đóng cửa" (PowerShell: `$env:FAKE_HOUR=23; npm run dev`) |
 
