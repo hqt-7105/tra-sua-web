@@ -81,7 +81,7 @@ tra-sua-web/
 | Creational | Builder | `server/src/patterns/creational/OrderItemBuilder.js` | TV3 | ✅ Xong ([docs](docs/patterns/builder.md)) |
 | Structural | Decorator | `server/src/patterns/structural/ToppingDecorator.js` | — | ✅ Mẫu |
 | Structural | Facade | `server/src/patterns/structural/OrderFacade.js` | TV1 | ⏳ Sprint 2 |
-| Structural | Adapter | `server/src/patterns/structural/PaymentAdapter.js` | TV3 | ⏳ Sprint 2 |
+| Structural | Adapter | `server/src/patterns/structural/PaymentAdapter.js` | TV3 | ✅ Xong ([docs](docs/patterns/adapter.md)) |
 | Structural | Proxy | `server/src/patterns/structural/MenuServiceProxy.js` | TV4 | ⏳ Sprint 2 |
 | Behavioral | Strategy | `server/src/patterns/behavioral/DiscountStrategy.js` | TV4 | ✅ Xong ([docs](docs/patterns/strategy.md)) |
 | Behavioral | State | `server/src/patterns/behavioral/OrderState.js` | TV5 | ✅ Xong ([docs](docs/patterns/state.md)) |

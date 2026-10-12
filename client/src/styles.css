@@ -1352,3 +1352,81 @@ html {
     padding: 56px 0;
   }
 }
+
+/* ---------- Thanh toán: chọn phương thức & cổng giả (TV3) ---------- */
+.pay-methods__list {
+  display: grid;
+  gap: 10px;
+}
+
+.pay-method {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--milk);
+  cursor: pointer;
+}
+
+.pay-method input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pay-method:has(input:focus-visible) {
+  outline: 2px solid var(--caramel);
+  outline-offset: 2px;
+}
+
+.pay-method--active {
+  border-color: var(--brown);
+  box-shadow: inset 0 0 0 1px var(--brown);
+  background: #fff8ee;
+}
+
+.pay-method__icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.pay-method__text {
+  display: grid;
+}
+
+.pay-method__text small {
+  color: var(--brown-2);
+  font-size: 0.85rem;
+}
+
+.mock-gateway__title {
+  font-size: 1.4rem;
+}
+
+.mock-gateway__info {
+  margin: 12px 0;
+}
+
+.mock-gateway__actions {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.mock-gateway__details {
+  margin-top: 16px;
+}
+
+@media (min-width: 640px) {
+  .pay-methods__list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .mock-gateway__actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
