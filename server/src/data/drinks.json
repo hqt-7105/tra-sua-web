@@ -40,6 +40,26 @@
     "isActive": true
   },
   {
+    "id": "ts-khoai-mon",
+    "categoryId": "tra-sua",
+    "name": "Trà sữa khoai môn",
+    "basePrice": 39000,
+    "description": "Khoai môn nghiền mịn, béo bùi, màu tím tự nhiên.",
+    "image": "/images/drinks/ts-khoai-mon.svg",
+    "isBestSeller": true,
+    "isActive": true
+  },
+  {
+    "id": "ts-hoa-nhai",
+    "categoryId": "tra-sua",
+    "name": "Trà sữa hoa nhài",
+    "basePrice": 37000,
+    "description": "Trà nhài thơm dịu pha sữa tươi, vị thanh nhẹ.",
+    "image": "/images/drinks/ts-hoa-nhai.svg",
+    "isBestSeller": false,
+    "isActive": true
+  },
+  {
     "id": "ttc-dao",
     "categoryId": "tra-trai-cay",
     "name": "Trà đào cam sả",
@@ -70,6 +90,26 @@
     "isActive": true
   },
   {
+    "id": "ttc-dau-tam",
+    "categoryId": "tra-trai-cay",
+    "name": "Trà dâu tằm",
+    "basePrice": 39000,
+    "description": "Dâu tằm Đà Lạt ngâm đường, chua ngọt mát lạnh.",
+    "image": "/images/drinks/ttc-dau-tam.svg",
+    "isBestSeller": true,
+    "isActive": true
+  },
+  {
+    "id": "ttc-xoai",
+    "categoryId": "tra-trai-cay",
+    "name": "Trà xoài nhiệt đới",
+    "basePrice": 42000,
+    "description": "Xoài cát chín, trà xanh và hạt chia.",
+    "image": "/images/drinks/ttc-xoai.svg",
+    "isBestSeller": false,
+    "isActive": true
+  },
+  {
     "id": "cf-sua-da",
     "categoryId": "ca-phe",
     "name": "Cà phê sữa đá",
@@ -90,6 +130,26 @@
     "isActive": true
   },
   {
+    "id": "cf-bac-xiu",
+    "categoryId": "ca-phe",
+    "name": "Bạc xỉu",
+    "basePrice": 32000,
+    "description": "Nhiều sữa ít cà phê, ngọt béo dễ uống.",
+    "image": "/images/drinks/cf-bac-xiu.svg",
+    "isBestSeller": true,
+    "isActive": true
+  },
+  {
+    "id": "cf-den-da",
+    "categoryId": "ca-phe",
+    "name": "Cà phê đen đá",
+    "basePrice": 25000,
+    "description": "Robusta rang mộc pha phin, đậm và đắng nhẹ.",
+    "image": "/images/drinks/cf-den-da.svg",
+    "isBestSeller": false,
+    "isActive": true
+  },
+  {
     "id": "dx-socola",
     "categoryId": "da-xay",
     "name": "Socola đá xay",
@@ -106,6 +166,26 @@
     "basePrice": 52000,
     "description": "Bánh cookie socola xay cùng sữa và đá.",
     "image": "/images/drinks/dx-cookie.svg",
+    "isBestSeller": false,
+    "isActive": true
+  },
+  {
+    "id": "dx-viet-quat",
+    "categoryId": "da-xay",
+    "name": "Sữa chua việt quất đá xay",
+    "basePrice": 52000,
+    "description": "Sữa chua lên men, việt quất và đá xay mịn.",
+    "image": "/images/drinks/dx-viet-quat.svg",
+    "isBestSeller": false,
+    "isActive": true
+  },
+  {
+    "id": "dx-caramel",
+    "categoryId": "da-xay",
+    "name": "Caramel đá xay",
+    "basePrice": 49000,
+    "description": "Caramel nấu tay xay cùng sữa, đá và kem tươi.",
+    "image": "/images/drinks/dx-caramel.svg",
     "isBestSeller": false,
     "isActive": true
   }
