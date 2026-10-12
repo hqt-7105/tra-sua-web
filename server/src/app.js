@@ -8,6 +8,7 @@ import orderRoutes from './routes/order.routes.js';
 import paymentRoutes from './routes/payment.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import { notFound, errorHandler } from './middlewares/errorHandler.js';
+import { securityHeaders } from './middlewares/securityHeaders.js';
 
 /**
  * Tạo Express app (tách khỏi index.js để test được mà không cần mở cổng cố định).
@@ -15,6 +16,7 @@ import { notFound, errorHandler } from './middlewares/errorHandler.js';
 export function createApp() {
   const app = express();
 
+  app.use(securityHeaders); // B4: header bảo mật cho mọi response
   app.use(cors());
   app.use(express.json());
 
