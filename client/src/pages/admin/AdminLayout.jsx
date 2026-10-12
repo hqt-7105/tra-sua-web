@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, Navigate, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { ADMIN_LOGOUT_EVENT, adminToken, api, apiUrl } from '../../api/client.js';
 import { useOrderEvents } from '../../hooks/useOrderEvents.js';
@@ -52,6 +52,12 @@ export default function AdminLayout() {
     listeners.current.forEach((listener) => listener(event));
   });
 
+  /** Trang con nhận sự kiện đơn hàng: useEffect(() => onOrderEvent(fn), [...]) — trả hàm hủy đăng ký. */
+  const onOrderEvent = useCallback((listener) => {
+    listeners.current.add(listener);
+    return () => listeners.current.delete(listener);
+  }, []);
+
   if (!token) {
     // Tự đăng xuất thì không nhớ trang cũ; hết phiên thì đăng nhập lại xong quay về đúng trang.
     const state = exitReason === 'logout' ? null : { from: location.pathname, expired: exitReason === 'expired' };
@@ -67,11 +73,6 @@ export default function AdminLayout() {
     }
     adminToken.clear();
     setToken(null);
-  };
-
-  const onOrderEvent = (listener) => {
-    listeners.current.add(listener);
-    return () => listeners.current.delete(listener);
   };
 
   return (

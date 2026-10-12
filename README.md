@@ -38,7 +38,7 @@ tra-sua-web/
 ├── client/                    # React
 │   ├── src/
 │   │   ├── api/               # client.js (gọi API, token admin), useFetch.js
-│   │   ├── components/        # Layout, DrinkCard, TaskNotice...
+│   │   ├── components/        # Layout, DrinkCard, Toast, PaymentMethodPicker...
 │   │   ├── hooks/             # useOrderEvents.js (Observer phía client - TV2)
 │   │   ├── pages/             # Home, Menu, DrinkDetail, Cart, Checkout, PaymentMock, OrderTracking
 │   │   │   └── admin/         # AdminLayout, AdminLogin, AdminOrders, AdminMenu
@@ -80,7 +80,7 @@ tra-sua-web/
 | Creational | Factory Method | `server/src/patterns/creational/DrinkFactory.js` | TV1 | ✅ Xong ([docs](docs/patterns/factory-method.md)) |
 | Creational | Singleton | `client/src/store/cartStore.js` | TV2 | ✅ Xong ([docs](docs/patterns/singleton.md)) |
 | Creational | Builder | `server/src/patterns/creational/OrderItemBuilder.js` | TV3 | ✅ Xong ([docs](docs/patterns/builder.md)) |
-| Structural | Decorator | `server/src/patterns/structural/ToppingDecorator.js` | — | ✅ Mẫu |
+| Structural | Decorator | `server/src/patterns/structural/ToppingDecorator.js` | — | ✅ Mẫu ([docs](docs/patterns/decorator.md)) |
 | Structural | Facade | `server/src/patterns/structural/OrderFacade.js` | TV1 | ✅ Xong ([docs](docs/patterns/facade.md)) |
 | Structural | Adapter | `server/src/patterns/structural/PaymentAdapter.js` | TV3 | ✅ Xong ([docs](docs/patterns/adapter.md)) |
 | Structural | Proxy | `server/src/patterns/structural/MenuServiceProxy.js` | TV4 | ✅ Xong ([docs](docs/patterns/proxy.md)) |

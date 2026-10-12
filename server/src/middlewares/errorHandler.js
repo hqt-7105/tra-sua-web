@@ -6,16 +6,6 @@ export class HttpError extends Error {
   }
 }
 
-/** Dùng cho các API chưa cài đặt trong Sprint 1. */
-export function notImplemented(owner) {
-  return (req, res) => {
-    res.status(501).json({
-      error: `Chưa cài đặt: ${req.method} ${req.originalUrl}`,
-      owner,
-    });
-  };
-}
-
 export function notFound(req, res) {
   res.status(404).json({ error: `Không tìm thấy: ${req.method} ${req.originalUrl}` });
 }

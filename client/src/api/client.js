@@ -54,7 +54,6 @@ async function request(path, { headers, ...options } = {}) {
     }
     const error = new Error(body?.error || `Lỗi ${res.status}`);
     error.status = res.status;
-    error.owner = body?.owner; // API chưa cài (501) sẽ cho biết ai phụ trách
     error.field = body?.field; // lỗi kiểm tra dữ liệu (400) cho biết ô nào sai
     throw error;
   }
