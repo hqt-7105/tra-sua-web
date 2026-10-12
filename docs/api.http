@@ -104,6 +104,9 @@ GET {{host}}/orders/{{placeCod.response.body.order.id}}
 ### S1 — xem đơn mẫu
 GET {{host}}/orders/DH001
 
+### S2 — tra cứu đơn theo mã + số điện thoại (C5); sai SĐT → 404
+GET {{host}}/orders/lookup?id=DH001&phone=0912345678
+
 ### S1 — chuyển trạng thái (next | cancel); sai trạng thái → 409
 PATCH {{host}}/orders/DH001/status
 Content-Type: {{json}}

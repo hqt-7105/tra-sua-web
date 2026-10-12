@@ -7,6 +7,7 @@ import Cart from './pages/Cart.jsx';
 import Checkout from './pages/Checkout.jsx';
 import PaymentMock from './pages/PaymentMock.jsx';
 import OrderTracking from './pages/OrderTracking.jsx';
+import OrderLookup from './pages/OrderLookup.jsx';
 import NotFound from './pages/NotFound.jsx';
 import AdminLayout from './pages/admin/AdminLayout.jsx';
 import AdminLogin from './pages/admin/AdminLogin.jsx';
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="menu/:id" element={<DrinkDetail />} />
         <Route path="cart" element={<Cart />} />
         <Route path="checkout" element={<Checkout />} />
+        <Route path="orders/lookup" element={<OrderLookup />} />
         <Route path="orders/:id" element={<OrderTracking />} />
         <Route path="*" element={<NotFound />} />
       </Route>

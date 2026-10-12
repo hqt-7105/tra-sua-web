@@ -125,3 +125,32 @@ test('C4 · định dạng lỗi thống nhất: { error } và thêm field khi d
   assert.equal(invalid.body.field, 'size');
   assert.equal(typeof invalid.body.error, 'string');
 });
+
+// ---------------------------------------------------------------- C5 (TV5): tra cứu đơn theo mã + SĐT
+test('C5 · GET /orders/lookup: mã đơn và SĐT khớp thì trả đơn (SĐT chấp nhận +84, mã không phân biệt hoa thường)', async () => {
+  const { status, body } = await get('/orders/lookup?id=DH001&phone=0912345678');
+  assert.equal(status, 200);
+  assert.equal(body.id, 'DH001');
+  assert.ok(body.status && Array.isArray(body.allowedActions));
+  const intl = await get(`/orders/lookup?id=dh001&phone=${encodeURIComponent('+84912345678')}`);
+  assert.equal(intl.status, 200);
+  assert.equal(intl.body.id, 'DH001');
+});
+
+test('C5 · GET /orders/lookup: sai SĐT hoặc sai mã đều 404 cùng một thông báo', async () => {
+  const wrongPhone = await get('/orders/lookup?id=DH001&phone=0987654321');
+  const wrongId = await get('/orders/lookup?id=DH999&phone=0912345678');
+  for (const res of [wrongPhone, wrongId]) {
+    assert.equal(res.status, 404);
+    assert.equal(res.body.error, 'Không tìm thấy đơn hàng');
+  }
+});
+
+test('C5 · GET /orders/lookup: thiếu tham số trả 400 kèm field', async () => {
+  const noPhone = await get('/orders/lookup?id=DH001');
+  assert.equal(noPhone.status, 400);
+  assert.equal(noPhone.body.field, 'phone');
+  const noId = await get('/orders/lookup?phone=0912345678');
+  assert.equal(noId.status, 400);
+  assert.equal(noId.body.field, 'id');
+});
