@@ -1,0 +1,257 @@
+# Bộ gọi thử API — dùng tiện ích "REST Client" (humao.rest-client) của VS Code.
+# Mở file này, bấm "Send Request" phía trên mỗi khối. Hướng dẫn: docs/HUONG_DAN_API.md
+# Server phải đang chạy: npm run dev (API ở cổng 3001).
+# Nhãn: # S0 = có sẵn từ đầu · # S1 = Sprint 1 · # S2 = Sprint 2 · # B4 = bảo mật. Tất cả đã chạy được.
+
+@host = http://localhost:3001/api
+@json = application/json
+
+############################################################ Hệ thống
+
+# S0 — kiểm tra server sống (xem cả header bảo mật B4 trong phần response)
+GET {{host}}/health
+
+############################################################ Menu (công khai)
+
+### S0 — danh mục
+GET {{host}}/categories
+
+### S1 — món đang bán, lọc theo danh mục / bán chạy / từ khóa (Factory Method)
+GET {{host}}/drinks?categoryId=tra-sua&bestSeller=true&q=sữa
+
+### S1 — chi tiết một món
+GET {{host}}/drinks/ts-truyen-thong
+
+### S1 — món không có → 404
+GET {{host}}/drinks/khong-co
+
+### S0 — topping đang bán
+GET {{host}}/toppings
+
+### S0 — size, mức đường, mức đá
+GET {{host}}/options
+
+############################################################ Giỏ hàng & mã giảm giá
+
+### S1 — tính giá một dòng món (Builder + Decorator): L, 50% đường, 2 topping, 2 ly → 106.000đ
+POST {{host}}/cart/price
+Content-Type: {{json}}
+
+{ "drinkId": "ts-truyen-thong", "size": "L", "sugar": 50, "ice": 70,
+  "toppingIds": ["tran-chau-den", "pudding"], "quantity": 2, "note": "ít ngọt" }
+
+### S1 — lựa chọn sai → 400 kèm field
+POST {{host}}/cart/price
+Content-Type: {{json}}
+
+{ "drinkId": "ts-truyen-thong", "size": "XL" }
+
+### S1 — mã đang dùng được (mục Khuyến mãi trang chủ)
+GET {{host}}/vouchers
+
+### S1 — áp mã MAY10 cho đơn 100.000đ → giảm 10.000đ (Strategy)
+POST {{host}}/vouchers/validate
+Content-Type: {{json}}
+
+{ "code": "MAY10", "subtotal": 100000, "shippingFee": 15000 }
+
+### S1 — mã hết hạn → 400
+POST {{host}}/vouchers/validate
+Content-Type: {{json}}
+
+{ "code": "HETHAN", "subtotal": 100000 }
+
+############################################################ Đơn hàng
+
+### S2 — đặt đơn COD (Facade). Ngoài 08:00–22:00 sẽ bị 400 field "store".
+# @name placeCod
+POST {{host}}/orders
+Content-Type: {{json}}
+
+{
+  "customer": { "name": "Nguyễn An", "phone": "0912345678", "address": "12 Nguyễn Huệ, Quận 1", "note": "Gọi trước khi giao" },
+  "items": [
+    { "drinkId": "ts-truyen-thong", "size": "L", "sugar": 50, "ice": 70, "toppingIds": ["tran-chau-den"], "quantity": 2, "note": "" }
+  ],
+  "voucherCode": "MAY10",
+  "paymentMethod": "COD"
+}
+
+### S2 — đặt đơn MoMo: response có payment.redirectUrl tới cổng giả
+# @name placeMomo
+POST {{host}}/orders
+Content-Type: {{json}}
+
+{
+  "customer": { "name": "Trần Bình", "phone": "0987654321", "address": "45 Lê Lợi, Quận 1, TP.HCM" },
+  "items": [{ "drinkId": "ttc-dao", "quantity": 1 }],
+  "paymentMethod": "MOMO"
+}
+
+### S2 — số điện thoại sai → 400 field "customer.phone" (Chain of Responsibility)
+POST {{host}}/orders
+Content-Type: {{json}}
+
+{
+  "customer": { "name": "Nguyễn An", "phone": "0123456789", "address": "12 Nguyễn Huệ, Quận 1" },
+  "items": [{ "drinkId": "ts-truyen-thong", "quantity": 1 }],
+  "paymentMethod": "COD"
+}
+
+### S1 — xem đơn vừa đặt (State: status, allowedActions, history)
+GET {{host}}/orders/{{placeCod.response.body.order.id}}
+
+### S1 — xem đơn mẫu
+GET {{host}}/orders/DH001
+
+### S1 — chuyển trạng thái (next | cancel); sai trạng thái → 409
+PATCH {{host}}/orders/DH001/status
+Content-Type: {{json}}
+
+{ "action": "next" }
+
+### S1 — hủy đơn đang giao → 409
+PATCH {{host}}/orders/DH002/status
+Content-Type: {{json}}
+
+{ "action": "cancel" }
+
+### S2 — luồng sự kiện SSE của một đơn (Observer). REST Client chờ tới khi hết thời gian;
+# dễ xem hơn bằng: curl -N http://localhost:3001/api/orders/DH001/events
+GET {{host}}/orders/DH001/events
+
+############################################################ Thanh toán
+
+### S2 — phương thức thanh toán
+GET {{host}}/payments/methods
+
+### S2 — xác nhận MoMo: lấy tham số từ redirectUrl của "placeMomo" rồi dán vào params.
+# Chữ ký sai (như dưới) → 400 "Chữ ký thanh toán không hợp lệ" (Adapter kiểm tra).
+POST {{host}}/payments/confirm
+Content-Type: {{json}}
+
+{ "gateway": "momo", "params": { "orderId": "DH004", "amount": "54000", "requestId": "x", "signature": "sai", "resultCode": "0" } }
+
+############################################################ Quản trị (cần đăng nhập)
+
+### S2 — đăng nhập admin, token được lưu vào biến {{adminToken}}
+# @name loginAdmin
+POST {{host}}/admin/login
+Content-Type: {{json}}
+
+{ "email": "admin@may.vn", "password": "admin123" }
+
+###
+@adminToken = {{loginAdmin.response.body.token}}
+
+### S2 — đăng nhập nhân viên
+# @name loginStaff
+POST {{host}}/admin/login
+Content-Type: {{json}}
+
+{ "email": "staff@may.vn", "password": "staff123" }
+
+###
+@staffToken = {{loginStaff.response.body.token}}
+
+### S2 — sai mật khẩu → 401 (sai 5 lần/phút → 429, B4)
+POST {{host}}/admin/login
+Content-Type: {{json}}
+
+{ "email": "admin@may.vn", "password": "sai-mat-khau" }
+
+### S2 — người đang đăng nhập
+GET {{host}}/admin/me
+Authorization: Bearer {{adminToken}}
+
+### S2 — không có token → 401
+GET {{host}}/admin/me
+
+### S2 — danh sách món, kể cả món ngừng bán (Proxy: staff, admin đều xem được)
+GET {{host}}/admin/drinks?includeInactive=true
+Authorization: Bearer {{staffToken}}
+
+### S2 — nhân viên sửa giá → 403 (Proxy chặn trước khi gọi MenuService)
+PUT {{host}}/admin/drinks/ts-truyen-thong
+Authorization: Bearer {{staffToken}}
+Content-Type: {{json}}
+
+{ "basePrice": 1000 }
+
+### S2 — admin sửa giá → 200, ghi nhật ký
+PUT {{host}}/admin/drinks/ts-truyen-thong
+Authorization: Bearer {{adminToken}}
+Content-Type: {{json}}
+
+{ "basePrice": 36000 }
+
+### S2 — admin thêm món
+POST {{host}}/admin/drinks
+Authorization: Bearer {{adminToken}}
+Content-Type: {{json}}
+
+{ "categoryId": "tra-sua", "name": "Trà sữa khoai môn nướng", "basePrice": 41000, "description": "Món mới", "isBestSeller": false }
+
+### S2 — dữ liệu sai → 400 field "basePrice" (BR19)
+POST {{host}}/admin/drinks
+Authorization: Bearer {{adminToken}}
+Content-Type: {{json}}
+
+{ "categoryId": "tra-sua", "name": "Món lỗi", "basePrice": -1 }
+
+### S2 — ngừng bán món (không xóa hẳn, BR23)
+DELETE {{host}}/admin/drinks/cf-muoi
+Authorization: Bearer {{adminToken}}
+
+### S2 — mở bán lại
+PUT {{host}}/admin/drinks/cf-muoi
+Authorization: Bearer {{adminToken}}
+Content-Type: {{json}}
+
+{ "isActive": true }
+
+### S2 — topping
+GET {{host}}/admin/toppings?includeInactive=true
+Authorization: Bearer {{adminToken}}
+
+### S2 — thêm topping
+POST {{host}}/admin/toppings
+Authorization: Bearer {{adminToken}}
+Content-Type: {{json}}
+
+{ "name": "Thạch cà phê", "price": 6000 }
+
+### S2 — sửa topping
+PUT {{host}}/admin/toppings/thach-dua
+Authorization: Bearer {{adminToken}}
+Content-Type: {{json}}
+
+{ "price": 6000 }
+
+### S2 — ngừng bán topping
+DELETE {{host}}/admin/toppings/thach-dua
+Authorization: Bearer {{adminToken}}
+
+### S2 — nhật ký sửa menu (chỉ admin; staff → 403)
+GET {{host}}/admin/audit-log
+Authorization: Bearer {{adminToken}}
+
+### S2 — danh sách đơn, lọc theo trạng thái
+GET {{host}}/admin/orders?status=PENDING
+Authorization: Bearer {{staffToken}}
+
+### S2 — nhân viên xác nhận đơn (phát STATUS_CHANGED cho trang khách)
+PATCH {{host}}/admin/orders/DH001/status
+Authorization: Bearer {{staffToken}}
+Content-Type: {{json}}
+
+{ "action": "next" }
+
+### S2 — luồng sự kiện mọi đơn cho admin (SSE). Xem bằng curl:
+# curl -N -H "Accept: text/event-stream" "http://localhost:3001/api/admin/events?token=<token>"
+GET {{host}}/admin/events
+Authorization: Bearer {{staffToken}}
+
+### S2 — đăng xuất → 204, token hết hiệu lực
+POST {{host}}/admin/logout
+Authorization: Bearer {{adminToken}}
