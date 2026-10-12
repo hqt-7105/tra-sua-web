@@ -29,6 +29,7 @@ Mở http://localhost:5173. Kiểm tra API: http://localhost:3001/api/health
 | `npm test` | Chạy toàn bộ test |
 | `npm test -w server` | Chỉ test backend |
 | `npm run build` | Build frontend ra `client/dist` |
+| `FAKE_HOUR=23 npm run dev` | Giả lập giờ để thử "cửa hàng đóng cửa" (PowerShell: `$env:FAKE_HOUR=23; npm run dev`) |
 
 ## Cấu trúc thư mục
 
@@ -80,7 +81,7 @@ tra-sua-web/
 | Creational | Singleton | `client/src/store/cartStore.js` | TV2 | ✅ Xong ([docs](docs/patterns/singleton.md)) |
 | Creational | Builder | `server/src/patterns/creational/OrderItemBuilder.js` | TV3 | ✅ Xong ([docs](docs/patterns/builder.md)) |
 | Structural | Decorator | `server/src/patterns/structural/ToppingDecorator.js` | — | ✅ Mẫu |
-| Structural | Facade | `server/src/patterns/structural/OrderFacade.js` | TV1 | ⏳ Sprint 2 |
+| Structural | Facade | `server/src/patterns/structural/OrderFacade.js` | TV1 | ✅ Xong ([docs](docs/patterns/facade.md)) |
 | Structural | Adapter | `server/src/patterns/structural/PaymentAdapter.js` | TV3 | ✅ Xong ([docs](docs/patterns/adapter.md)) |
 | Structural | Proxy | `server/src/patterns/structural/MenuServiceProxy.js` | TV4 | ✅ Xong ([docs](docs/patterns/proxy.md)) |
 | Behavioral | Strategy | `server/src/patterns/behavioral/DiscountStrategy.js` | TV4 | ✅ Xong ([docs](docs/patterns/strategy.md)) |

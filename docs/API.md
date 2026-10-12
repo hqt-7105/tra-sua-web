@@ -17,7 +17,7 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
 | POST | `/vouchers/validate` | ✅ Xong (Strategy) | TV4 |
 | GET | `/orders/:id` | ✅ Xong (State) | TV5 |
 | PATCH | `/orders/:id/status` | ✅ Xong (State) | TV5 |
-| POST | `/orders` | ⏳ S2 (Facade) | TV1 |
+| POST | `/orders` | ✅ Xong (Facade) | TV1 |
 | GET | `/orders/:id/events` | ✅ Xong (Observer, SSE) | TV2 |
 | GET | `/payments/methods` | ✅ Xong | TV3 |
 | POST | `/payments/confirm` | ✅ Xong (Adapter) | TV3 |
@@ -166,6 +166,9 @@ Response `201`:
 }
 ```
 Lỗi: `400` + `field` (BR10–BR14) · `404` mã giảm giá/món không tồn tại · `402` cổng từ chối tạo giao dịch (không tạo đơn).
+`field` của chuỗi kiểm tra: `items`, `customer.name`, `customer.phone`, `customer.address`, `customer.note`, `paymentMethod`, `items[i].drinkId`, `items[i].toppingIds`, `items[i].quantity`, `store` (ngoài giờ 08:00–22:00).
+Mã giảm giá hết hạn/chưa đủ tối thiểu → `400`. Mọi trường giá gửi lên bị bỏ qua (BR02). COD → `paymentStatus: "UNPAID"`, `payment.redirectUrl: null`.
+Giờ giả lập để thử ngoài giờ: chạy server với biến môi trường `FAKE_HOUR=23`.
 
 ### `GET /orders/:id/events` — TV2 (Observer, SSE)
 `Content-Type: text/event-stream`. Mỗi sự kiện:

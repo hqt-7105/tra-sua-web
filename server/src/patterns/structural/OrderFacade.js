@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * PATTERN: Facade (Structural) — PHỤ TRÁCH: TV1           [Sprint 2 - CHƯA LÀM]
+ * PATTERN: Facade (Structural) — PHỤ TRÁCH: TV1
  * ============================================================================
  * Vấn đề:
  *   Đặt một đơn phải đi qua 6-7 hệ thống con: kiểm tra hợp lệ (Chain of
@@ -48,12 +48,20 @@
  *     6. order.paymentStatus = payment.status; orderRepository.save(order)
  *     7. orderEvents.notify({ type: 'ORDER_CREATED', orderId, status, paymentStatus, at })
  *
- * Test chấp nhận: tests/facade.test.js (dùng hệ thống con giả, không cần chờ
- * người khác làm xong). Bỏ `todo` khi làm xong.
+ * Ví dụ sử dụng (instance nối hệ thống con thật: src/services/orderFacadeInstance.js):
+ *   const { order, payment } = await orderFacade.placeOrder({
+ *     customer: { name: 'Nguyễn An', phone: '0912345678', address: '12 Nguyễn Huệ, Quận 1' },
+ *     items: [{ drinkId: 'ts-truyen-thong', size: 'L', toppingIds: ['tran-chau-den'], quantity: 2 }],
+ *     voucherCode: 'MAY10',
+ *     paymentMethod: 'MOMO',
+ *   });
+ *   // order.status 'PENDING', order.total 97800, payment.redirectUrl '/payment/mock?gateway=momo&...'
+ *
+ * Test chấp nhận: tests/facade.test.js (dùng hệ thống con giả), tests/place-order.test.js (API)
  * ============================================================================
  */
-// import { Order } from '../behavioral/OrderState.js';
-// import { HttpError } from '../../middlewares/errorHandler.js';
+import { Order } from '../behavioral/OrderState.js';
+import { HttpError } from '../../middlewares/errorHandler.js';
 
 export class OrderFacade {
   constructor({
@@ -74,8 +82,60 @@ export class OrderFacade {
     this.config = config;
   }
 
-  // eslint-disable-next-line no-unused-vars
+  /**
+   * Một lời gọi cho cả quy trình đặt đơn (UC06). Facade chỉ ĐIỀU PHỐI: mỗi bước giao
+   * cho đúng hệ thống con, không tự kiểm tra dữ liệu, tính giảm giá hay gọi SDK.
+   */
   async placeOrder(request) {
-    throw new Error('TODO(TV1): chưa cài OrderFacade.placeOrder()');
+    // 1. Kiểm tra dữ liệu (Chain of Responsibility) — sai thì dừng ngay
+    this.validator.validate(request);
+
+    // 2. Dựng từng dòng món từ dữ liệu gốc, giá do server tính (Builder + Factory + Decorator)
+    const items = request.items.map((line) => this.createItem(line));
+    const subtotal = items.reduce((sum, item) => sum + item.totalPrice, 0);
+
+    // 3. Giảm giá (Strategy) và tổng tiền (BR06, BR09)
+    const { shippingFee } = this.config;
+    const voucher = request.voucherCode
+      ? this.voucherService.apply({ code: request.voucherCode, subtotal, shippingFee })
+      : null;
+    const discount = voucher?.discount ?? 0;
+    const total = subtotal + shippingFee - discount;
+
+    // 4. Tạo đơn ở trạng thái PENDING (State)
+    const { customer } = request;
+    const order = new Order({
+      id: this.orderRepository.nextId(),
+      customerName: customer.name.trim(),
+      phone: customer.phone.trim(),
+      address: customer.address.trim(),
+      note: customer.note?.trim() ?? '',
+      items: items.map((item) => item.toJSON()),
+      subtotal,
+      shippingFee,
+      discount,
+      total,
+      voucherCode: voucher ? (voucher.code ?? request.voucherCode) : null,
+      paymentMethod: request.paymentMethod,
+    });
+
+    // 5. Thanh toán qua cổng tương ứng (Adapter) — cổng từ chối thì KHÔNG lưu đơn (BR18)
+    const payment = await this.paymentGatewayFactory(request.paymentMethod).pay(order);
+    if (payment.status === 'FAILED') throw new HttpError(402, payment.message);
+
+    // 6. Lưu đơn với trạng thái thanh toán cổng trả về (BR16)
+    order.paymentStatus = payment.status;
+    this.orderRepository.save(order);
+
+    // 7. Báo cho mọi nơi quan tâm (Observer): admin thấy đơn mới ngay
+    this.orderEvents.notify({
+      type: 'ORDER_CREATED',
+      orderId: order.id,
+      status: order.getStatus(),
+      paymentStatus: order.paymentStatus,
+      at: new Date().toISOString(),
+    });
+
+    return { order: order.toJSON(), payment };
   }
 }

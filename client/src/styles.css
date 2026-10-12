@@ -1422,10 +1422,6 @@ html {
 }
 
 @media (min-width: 640px) {
-  .pay-methods__list {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .mock-gateway__actions {
     grid-template-columns: 1fr 1fr;
   }
@@ -1727,5 +1723,53 @@ textarea.input {
   .data-table__actions {
     white-space: nowrap;
     text-align: right !important;
+  }
+}
+
+/* ---------- Đặt hàng (TV1) ---------- */
+.checkout {
+  max-width: 1040px;
+}
+
+.checkout__title {
+  margin-top: 12px;
+}
+
+.checkout__grid {
+  display: grid;
+  gap: 0 24px;
+}
+
+.checkout__field {
+  margin-bottom: 14px;
+}
+
+.checkout__field:last-child {
+  margin-bottom: 0;
+}
+
+.checkout__submit {
+  width: 100%;
+  min-height: 52px;
+}
+
+.checkout__hint {
+  font-size: 0.85rem;
+  margin: 10px 0 0;
+}
+
+.checkout__side .voucher {
+  margin: 12px 0;
+}
+
+@media (min-width: 900px) {
+  .checkout__grid {
+    grid-template-columns: 1.25fr 1fr;
+    align-items: start;
+  }
+
+  .checkout__side {
+    position: sticky;
+    top: 88px;
   }
 }
