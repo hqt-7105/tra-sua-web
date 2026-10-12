@@ -858,6 +858,123 @@ html {
   margin-top: 8px;
 }
 
+/* ---------- Giỏ hàng (TV1) ---------- */
+.cart-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.cart-line {
+  display: grid;
+  gap: 12px;
+  background: var(--milk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.cart-line__name {
+  font-weight: 700;
+}
+
+.cart-line__name:hover {
+  color: var(--caramel-dark);
+}
+
+.cart-line__info .muted,
+.cart-line__unit {
+  margin: 4px 0 0;
+  font-size: 0.88rem;
+}
+
+.cart-line__unit {
+  color: var(--brown-2);
+}
+
+.cart-line__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.cart-line__controls .price {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.cart-line__remove {
+  color: var(--danger);
+}
+
+.cart__summary {
+  margin: 0;
+}
+
+.cart__note {
+  margin: 8px 0 0;
+  font-size: 0.88rem;
+}
+
+.cart-empty {
+  background: var(--milk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 32px 16px;
+}
+
+.cart-empty__icon {
+  font-size: 3rem;
+  margin: 0;
+}
+
+/* Ô tăng/giảm số lượng — dùng chung ở giỏ hàng và chi tiết món */
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--milk);
+}
+
+.stepper__btn {
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--brown);
+  cursor: pointer;
+}
+
+.stepper__btn:hover:not(:disabled) {
+  background: var(--cream-2);
+}
+
+.stepper__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.stepper__value {
+  min-width: 28px;
+  text-align: center;
+  font-weight: 700;
+}
+
+@media (min-width: 640px) {
+  .cart-line {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+}
+
 /* ---------- Mã giảm giá (TV4) ---------- */
 .field__label {
   display: block;

@@ -8,8 +8,8 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
 |---|---|---|---|
 | GET | `/health` | ✅ Xong | — |
 | GET | `/categories` | ✅ Xong | — |
-| GET | `/drinks?categoryId=&bestSeller=true&q=` | ✅ Xong (TV1 refactor dùng Factory) | TV1 |
-| GET | `/drinks/:id` | ✅ Xong (TV1 refactor dùng Factory) | TV1 |
+| GET | `/drinks?categoryId=&bestSeller=true&q=` | ✅ Xong (Factory Method) | TV1 |
+| GET | `/drinks/:id` | ✅ Xong (Factory Method) | TV1 |
 | GET | `/toppings` | ✅ Xong | — |
 | GET | `/options` | ✅ Xong | — |
 | POST | `/cart/price` | ⏳ S1 | TV3 |
@@ -48,7 +48,7 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
   "isActive": true
 }
 ```
-Sau khi TV1 làm xong, có thêm:
+Mỗi món còn có thêm phần do loại đồ uống tự mô tả (Factory Method, TV1), cả ở `GET /drinks`:
 ```json
 { "categoryName": "Trà sữa", "customization": { "allowToppings": true, "allowSugar": true, "allowIce": true } }
 ```

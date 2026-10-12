@@ -50,7 +50,7 @@ tra-sua-web/
 │   │   ├── config.js          # phí ship, giờ mở cửa, phương thức thanh toán
 │   │   ├── events.js          # instance Observer dùng chung
 │   │   ├── data/              # JSON: danh mục, món, topping, tùy chọn, tài khoản demo
-│   │   ├── domain/            # Drink (lớp gốc)
+│   │   ├── domain/            # Drink (lớp gốc), drinks/ (MilkTea, FruitTea, Coffee, IceBlended - TV1)
 │   │   ├── integrations/      # SDK MoMo / VNPay GIẢ LẬP (Adaptee)
 │   │   ├── middlewares/       # lỗi, xác thực
 │   │   ├── patterns/
@@ -76,7 +76,7 @@ tra-sua-web/
 
 | Nhóm | Pattern | File | Phụ trách | Trạng thái |
 |---|---|---|---|---|
-| Creational | Factory Method | `server/src/patterns/creational/DrinkFactory.js` | TV1 | ⏳ Sprint 1 |
+| Creational | Factory Method | `server/src/patterns/creational/DrinkFactory.js` | TV1 | ✅ Xong ([docs](docs/patterns/factory-method.md)) |
 | Creational | Singleton | `client/src/store/cartStore.js` | TV2 | ✅ Xong ([docs](docs/patterns/singleton.md)) |
 | Creational | Builder | `server/src/patterns/creational/OrderItemBuilder.js` | TV3 | ⏳ Sprint 1 |
 | Structural | Decorator | `server/src/patterns/structural/ToppingDecorator.js` | — | ✅ Mẫu |
