@@ -141,17 +141,19 @@ Không còn quy tắc nào từ BR01 đến BR23 chưa có test case.
 
 ## 10. Bảng tiêu chí nghiệm thu (DAC_TA mục 10 → test case)
 
-| Tiêu chí | Test case | Test tự động (`server/tests/acceptance.test.js`) |
+Test tự động: `server/tests/acceptance.test.js`, chạy bằng `npm run test:acceptance`; mỗi tiêu chí là một khối `describe` đúng tên dưới đây. Tiêu chí 2 phần gộp dòng và giữ giỏ khi tải lại nằm ở phía trình duyệt: `client/tests/cartStore.test.js`, `client/tests/cartStorage.test.js` (`npm test -w client`).
+
+| Tiêu chí | Test case | Khối `describe` trong `acceptance.test.js` |
 |---|---|---|
-| 1. Size L, đường 50%, 2 topping → giá đúng BR02 | TC05 | Tiêu chí 1 |
-| 2. Thêm 2 lần cùng tổ hợp → gộp, tải lại vẫn còn | TC09, TC10 | Tiêu chí 2 (gộp ở `cartStore.test.js` phía client) |
-| 3. MAY10 cho đơn 100.000đ → giảm 10.000đ; mã hết hạn báo lỗi | TC13, TC15 | Tiêu chí 3 |
-| 4. Đặt COD → PENDING/UNPAID; admin thấy đơn mới không tải lại | TC20, TC21 | Tiêu chí 4 |
-| 5. Nhân viên xác nhận → khách tự đổi; hủy đơn đang giao bị từ chối | TC35, TC43 | Tiêu chí 5 |
-| 6. MoMo thành công → PAID; VNPay hủy → CANCELLED | TC30, TC31 | Tiêu chí 6 |
-| 7. SĐT sai → lỗi đúng ô; 23:00 → đóng cửa | TC22, TC25 | Tiêu chí 7 |
-| 8. Nhân viên sửa giá → 403; admin sửa được, nhật ký ghi lại | TC45, TC46 | Tiêu chí 8 |
-| 9. `npm test` PASS, không `todo`; đủ `docs/patterns` | TC55 | Tiêu chí 9 |
+| 1. Size L, đường 50%, 2 topping → giá đúng BR02 | TC05 | Tiêu chí 1: size L, đường 50%, 2 topping → giá đúng BR02 |
+| 2. Thêm 2 lần cùng tổ hợp → gộp, tải lại vẫn còn | TC09, TC10 | Tiêu chí 2: cùng tổ hợp → gộp một dòng số lượng 2 (gộp và tải lại: client/tests/cartStore.test.js) |
+| 3. MAY10 cho đơn 100.000đ → giảm 10.000đ; mã hết hạn báo lỗi | TC13, TC15 | Tiêu chí 3: MAY10 cho đơn 100.000đ giảm 10.000đ; mã hết hạn báo lỗi rõ ràng |
+| 4. Đặt COD → PENDING/UNPAID; admin thấy đơn mới không tải lại | TC20, TC21 | Tiêu chí 4: đặt COD → PENDING/UNPAID; admin nhận đơn mới không cần tải lại |
+| 5. Nhân viên xác nhận → khách tự đổi; hủy đơn đang giao bị từ chối | TC35, TC43 | Tiêu chí 5: nhân viên xác nhận → trang khách tự đổi; hủy đơn đang giao bị từ chối |
+| 6. MoMo thành công → PAID; VNPay hủy → CANCELLED | TC30, TC31 | Tiêu chí 6: MoMo thanh toán thành công → PAID; VNPay hủy → CANCELLED |
+| 7. SĐT sai → lỗi đúng ô; 23:00 → đóng cửa | TC22, TC25 | Tiêu chí 7: SĐT sai → lỗi đúng ô; đặt lúc 23:00 → báo cửa hàng đóng cửa |
+| 8. Nhân viên sửa giá → 403; admin sửa được, nhật ký ghi lại | TC45, TC46 | Tiêu chí 8: nhân viên sửa giá → 403; admin sửa được, nhật ký ghi lại |
+| 9. `npm test` PASS, không `todo`; đủ `docs/patterns` | TC55 | Tiêu chí 9: không còn test todo; đủ 11 pattern có tài liệu và khối chú thích GoF |
 
 ## Phụ lục — lệnh dán vào DevTools → Console (trang http://localhost:5173)
 
