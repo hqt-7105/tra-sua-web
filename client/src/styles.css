@@ -935,49 +935,6 @@ html {
   }
 }
 
-/* ---------- Task notice (chỉ dùng khi đang phát triển) ---------- */
-.notice {
-  margin: 20px 0;
-  border: 2px dashed var(--caramel);
-  border-radius: var(--radius);
-  background: #fff8ee;
-  padding: 16px 18px;
-  font-size: 0.93rem;
-}
-
-.notice__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-
-.notice__owner {
-  background: var(--caramel);
-  color: #fff;
-  font-weight: 800;
-  padding: 2px 10px;
-  border-radius: 999px;
-}
-
-.notice__pattern {
-  background: var(--cream-2);
-  font-weight: 600;
-  padding: 2px 10px;
-  border-radius: 999px;
-}
-
-.notice__body ul {
-  margin: 10px 0 0;
-  padding-left: 20px;
-}
-
-.notice__ref {
-  margin: 8px 0 0;
-  font-size: 0.8rem;
-  color: var(--brown-2);
-}
-
 .cart__actions {
   display: flex;
   flex-wrap: wrap;
@@ -1771,5 +1728,60 @@ textarea.input {
   .checkout__side {
     position: sticky;
     top: 88px;
+  }
+}
+
+/* ---------- Quản lý đơn (TV5) ---------- */
+.data-table__row--fresh {
+  box-shadow: inset 4px 0 0 var(--matcha);
+}
+
+.admin-order__new {
+  margin: 0 0 0 8px;
+}
+
+.data-table__detail td {
+  display: block;
+  text-align: left;
+}
+
+.admin-order {
+  display: grid;
+  gap: 8px 24px;
+  padding: 8px 0;
+}
+
+.admin-order .panel__title {
+  margin-top: 4px;
+}
+
+.data-table__actions .link-btn {
+  min-height: 40px;
+  padding: 0 4px;
+}
+
+@media (min-width: 768px) {
+  .data-table__detail td {
+    display: table-cell;
+    background: var(--cream);
+  }
+
+  .admin-order {
+    grid-template-columns: 1fr 1.5fr 1fr;
+  }
+}
+
+/* Cột nội dung admin không giãn theo nội dung dài (thanh tab, bảng): tab tự cuộn ngang bên trong. */
+.admin {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.admin__main {
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  .admin {
+    grid-template-columns: 240px minmax(0, 1fr);
   }
 }

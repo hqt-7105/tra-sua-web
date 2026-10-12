@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import { notImplemented } from '../middlewares/errorHandler.js';
+import { HttpError } from '../middlewares/errorHandler.js';
 import { requireAuth } from '../middlewares/auth.js';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
 import { authService } from '../services/authService.js';
 import { menuService } from '../services/menuService.js';
 import { MenuServiceProxy } from '../patterns/structural/MenuServiceProxy.js';
 import { auditLogRepository } from '../repositories/auditLogRepository.js';
+import { orderRepository } from '../repositories/orderRepository.js';
+import { changeOrderStatus } from '../services/orderStatusService.js';
 import { adminFeed } from '../events.js';
 import { openEventStream } from '../utils/sse.js';
 
@@ -50,11 +52,23 @@ router.get('/audit-log', adminOnly, (req, res) => {
 });
 
 // ---------------------------------------------------------------- TV5 (Sprint 2)
-// Danh sách đơn: ?status=PENDING → mới nhất trước
-router.get('/orders', staff, notImplemented('TV5'));
-// Đổi trạng thái: body { action: 'next' | 'cancel' } → 409 nếu không hợp lệ,
-// thành công thì orderEvents.notify({ type: 'STATUS_CHANGED', ... })
-router.patch('/orders/:id/status', staff, notImplemented('TV5'));
+const ORDER_STATUSES = ['PENDING', 'PREPARING', 'DELIVERING', 'COMPLETED', 'CANCELLED'];
+
+// Danh sách đơn: ?status=PENDING → mới nhất trước; bỏ trống = tất cả (UC10)
+router.get('/orders', staff, (req, res) => {
+  const { status } = req.query;
+  if (status !== undefined && status !== '' && !ORDER_STATUSES.includes(status)) {
+    throw Object.assign(new HttpError(400, `Trạng thái lọc không hợp lệ, chỉ nhận: ${ORDER_STATUSES.join(', ')}`), {
+      field: 'status',
+    });
+  }
+  res.json(orderRepository.findAll({ status: status || undefined }));
+});
+// Đổi trạng thái: body { action: 'next' | 'cancel' } → 409 nếu không hợp lệ (State),
+// thành công thì phát STATUS_CHANGED (Observer) — dùng chung service với route của khách.
+router.patch('/orders/:id/status', staff, (req, res) => {
+  res.json(changeOrderStatus(req.params.id, req.body?.action));
+});
 
 // ---------------------------------------------------------------- TV2 (Sprint 2)
 // SSE: luồng sự kiện mọi đơn cho màn hình admin (AdminFeedObserver).

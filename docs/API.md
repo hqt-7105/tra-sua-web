@@ -25,11 +25,10 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
 | GET/POST | `/admin/drinks`, `/admin/toppings` | ✅ Xong (Proxy) | TV4 |
 | PUT/DELETE | `/admin/drinks/:id`, `/admin/toppings/:id` | ✅ Xong (Proxy) | TV4 |
 | GET | `/admin/audit-log` | ✅ Xong | TV4 |
-| GET | `/admin/orders?status=` | ⏳ S2 | TV5 |
-| PATCH | `/admin/orders/:id/status` | ⏳ S2 | TV5 |
+| GET | `/admin/orders?status=` | ✅ Xong | TV5 |
+| PATCH | `/admin/orders/:id/status` | ✅ Xong (State + Observer) | TV5 |
 | GET | `/admin/events` | ✅ Xong (Observer, SSE) | TV2 |
 
-⏳ = đang trả `501` kèm `owner` (người phụ trách).
 
 ---
 
@@ -221,6 +220,7 @@ Nhật ký: `[{ "at": "...", "email": "admin@may.vn", "action": "updateDrink", "
 ### `/admin/orders` — TV5
 - `GET /admin/orders?status=PENDING` → mảng đơn (cùng dạng `GET /orders/:id`), mới nhất trước.
 - `PATCH /admin/orders/:id/status` body `{ "action": "next" | "cancel" }` → đơn sau khi đổi; `409` nếu không hợp lệ; phát `STATUS_CHANGED`.
+- `status` lạ → `400` kèm `field: "status"`; action lạ → `400` kèm `field: "action"`; không có đơn → `404`. Quyền: admin và staff.
 
 ### `GET /admin/events?token=...` — TV2 (Observer, SSE)
 Giống `/orders/:id/events` nhưng nhận sự kiện của **mọi** đơn. Token đi qua query vì `EventSource` không gửi được header.

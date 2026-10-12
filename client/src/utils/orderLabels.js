@@ -13,7 +13,7 @@ export const STATUS_LABELS = {
 };
 
 export const PAYMENT_STATUS_LABELS = {
-  UNPAID: 'Thanh toán khi nhận hàng',
+  UNPAID: 'Chưa thu tiền (trả khi nhận hàng)',
   PENDING: 'Chờ thanh toán',
   PAID: 'Đã thanh toán',
   FAILED: 'Thanh toán thất bại',
