@@ -1,10 +1,8 @@
-// Facade — TV1 (Sprint 2). Khi cài xong, XÓA `{ todo: 'TV1-S2' }` ở từng test.
+// Facade — TV1 (Sprint 2). Test chấp nhận đã bật toàn bộ.
 // Mọi hệ thống con đều là đồ GIẢ nên test chạy được dù người khác chưa làm xong.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { OrderFacade } from '../src/patterns/structural/OrderFacade.js';
-
-const TODO = { todo: 'TV1-S2' };
 
 const request = (overrides = {}) => ({
   customer: { name: 'Nguyễn An', phone: '0912345678', address: '12 Nguyễn Huệ, Quận 1', note: '' },
@@ -77,7 +75,7 @@ function setup({ failValidation = false, paymentStatus } = {}) {
   return { facade: new OrderFacade(deps), calls, saved, events };
 }
 
-test('đặt đơn COD: tính tiền, lưu đơn, phát sự kiện ORDER_CREATED', TODO, async () => {
+test('đặt đơn COD: tính tiền, lưu đơn, phát sự kiện ORDER_CREATED', async () => {
   const { facade, saved, events } = setup();
   const { order, payment } = await facade.placeOrder(request());
 
@@ -99,7 +97,7 @@ test('đặt đơn COD: tính tiền, lưu đơn, phát sự kiện ORDER_CREATE
   assert.equal(events[0].orderId, 'DH100');
 });
 
-test('có mã giảm giá thì trừ tiền và lưu mã', TODO, async () => {
+test('có mã giảm giá thì trừ tiền và lưu mã', async () => {
   const { facade } = setup();
   const { order } = await facade.placeOrder(request({ voucherCode: 'GIAM10K' }));
   assert.equal(order.discount, 10000);
@@ -107,26 +105,26 @@ test('có mã giảm giá thì trừ tiền và lưu mã', TODO, async () => {
   assert.equal(order.voucherCode, 'GIAM10K');
 });
 
-test('thanh toán online trả về link chuyển sang cổng', TODO, async () => {
+test('thanh toán online trả về link chuyển sang cổng', async () => {
   const { facade } = setup();
   const { order, payment } = await facade.placeOrder(request({ paymentMethod: 'MOMO' }));
   assert.equal(order.paymentStatus, 'PENDING');
   assert.equal(payment.redirectUrl, '/payment/mock?orderId=DH100');
 });
 
-test('gọi các hệ thống con đúng thứ tự', TODO, async () => {
+test('gọi các hệ thống con đúng thứ tự', async () => {
   const { facade, calls } = setup();
   await facade.placeOrder(request({ voucherCode: 'GIAM10K' }));
   assert.deepEqual(calls, ['validate', 'createItem', 'createItem', 'voucher', 'pay', 'save', 'notify']);
 });
 
-test('dữ liệu không hợp lệ thì dừng ngay, không thanh toán, không lưu', TODO, async () => {
+test('dữ liệu không hợp lệ thì dừng ngay, không thanh toán, không lưu', async () => {
   const { facade, calls } = setup({ failValidation: true });
   await assert.rejects(facade.placeOrder(request()), { status: 400, field: 'customer.phone' });
   assert.deepEqual(calls, ['validate']);
 });
 
-test('thanh toán thất bại thì báo lỗi 402 và không lưu đơn', TODO, async () => {
+test('thanh toán thất bại thì báo lỗi 402 và không lưu đơn', async () => {
   const { facade, saved, events } = setup({ paymentStatus: 'FAILED' });
   await assert.rejects(facade.placeOrder(request({ paymentMethod: 'VNPAY' })), {
     status: 402,

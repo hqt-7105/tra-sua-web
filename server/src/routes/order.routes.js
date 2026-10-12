@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { notImplemented } from '../middlewares/errorHandler.js';
+import { asyncHandler } from '../middlewares/asyncHandler.js';
 import { customerStream } from '../events.js';
 import { openEventStream } from '../utils/sse.js';
 import { changeOrderStatus, findOrderOr404 } from '../services/orderStatusService.js';
+import { orderFacade } from '../services/orderFacadeInstance.js';
 
 const router = Router();
 
@@ -13,7 +14,12 @@ const router = Router();
  *   Route CHỈ gọi facade.placeOrder(req.body), không tự xử lý nghiệp vụ.
  *   Lỗi: 400 (ValidationError, kèm field), 404 (voucher/món), 402 (thanh toán thất bại)
  */
-router.post('/', notImplemented('TV1'));
+router.post(
+  '/',
+  asyncHandler(async (req, res) => {
+    res.status(201).json(await orderFacade.placeOrder(req.body ?? {}));
+  }),
+);
 
 /**
  * GET /api/orders/:id/events — TV2 (Observer, SSE)
