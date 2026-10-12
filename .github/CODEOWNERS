@@ -1,0 +1,72 @@
+# CODEOWNERS — B1 (TV1): PR đụng tới file nào thì GitHub tự gắn người review là chủ file đó.
+# Theo bảng phân công tổng (docs/KE_HOACH.md mục 5).
+#
+# ⚠️ TẠM THỜI mọi dòng đều dùng @hqt-7105 (tài khoản trưởng nhóm).
+#    Thay bằng username GitHub THẬT của từng thành viên theo dòng chú thích ngay phía trên mỗi nhóm.
+#    Quy tắc: dòng khớp nằm DƯỚI CÙNG thắng, nên dòng mặc định đặt đầu file.
+#    Muốn bắt buộc chủ file duyệt: Settings → Branches → bật "Require review from Code Owners".
+
+# Mặc định — TV1 (trưởng nhóm, tích hợp)
+*                                                      @hqt-7105
+
+# TV1 — hạ tầng, Factory Method, Facade, test nghiệm thu
+/.github/                                              @hqt-7105
+/docs/HUONG_DAN_GIT.md                                 @hqt-7105
+/server/src/patterns/creational/DrinkFactory.js        @hqt-7105
+/server/src/domain/                                    @hqt-7105
+/server/src/patterns/structural/OrderFacade.js         @hqt-7105
+/server/src/services/orderFacadeInstance.js            @hqt-7105
+/client/src/pages/Cart.jsx                             @hqt-7105
+/client/src/pages/Checkout.jsx                         @hqt-7105
+/server/tests/acceptance.test.js                       @hqt-7105
+
+# TV2 — Singleton, Observer, giao diện dùng chung, responsive
+/client/src/store/                                     @hqt-7105
+/server/src/patterns/behavioral/OrderEvents.js         @hqt-7105
+/server/src/events.js                                  @hqt-7105
+/server/src/utils/sse.js                               @hqt-7105
+/client/src/hooks/                                     @hqt-7105
+/client/src/components/                                @hqt-7105
+/client/src/styles.css                                 @hqt-7105
+/client/src/pages/Home.jsx                             @hqt-7105
+
+# TV3 — Builder, Adapter, validators, dữ liệu mẫu
+/server/src/patterns/creational/OrderItemBuilder.js    @hqt-7105
+/server/src/services/orderItemService.js               @hqt-7105
+/server/src/patterns/structural/PaymentAdapter.js      @hqt-7105
+/server/src/routes/payment.routes.js                   @hqt-7105
+/client/src/pages/PaymentMock.jsx                      @hqt-7105
+/client/src/pages/DrinkDetail.jsx                      @hqt-7105
+/server/src/utils/validators.js                        @hqt-7105
+/client/src/utils/validators.js                        @hqt-7105
+/server/src/data/                                      @hqt-7105
+/server/scripts/check-data.js                          @hqt-7105
+
+# TV4 — Strategy, Proxy, đăng nhập, bảo mật, api.http
+/server/src/patterns/behavioral/DiscountStrategy.js    @hqt-7105
+/server/src/services/voucherService.js                 @hqt-7105
+/server/src/patterns/structural/MenuServiceProxy.js    @hqt-7105
+/server/src/services/menuService.js                    @hqt-7105
+/server/src/services/authService.js                    @hqt-7105
+/server/src/middlewares/                               @hqt-7105
+/server/src/data/users.json                            @hqt-7105
+/client/src/pages/admin/AdminLogin.jsx                 @hqt-7105
+/client/src/pages/admin/AdminMenu.jsx                  @hqt-7105
+/docs/api.http                                         @hqt-7105
+/docs/HUONG_DAN_API.md                                 @hqt-7105
+
+# TV5 — State, Chain of Responsibility, quản lý đơn, tra cứu đơn, test case
+/server/src/patterns/behavioral/OrderState.js          @hqt-7105
+/server/src/repositories/orderRepository.js            @hqt-7105
+/server/src/patterns/behavioral/OrderValidation.js     @hqt-7105
+/server/src/services/orderStatusService.js             @hqt-7105
+/server/src/routes/order.routes.js                     @hqt-7105
+/client/src/pages/OrderTracking.jsx                    @hqt-7105
+/client/src/pages/OrderLookup.jsx                      @hqt-7105
+/client/src/pages/admin/AdminOrders.jsx                @hqt-7105
+/docs/TEST_CASES.md                                    @hqt-7105
+
+# Hợp đồng chung — cả nhóm phải biết khi đổi (trưởng nhóm duyệt)
+/docs/API.md                                           @hqt-7105
+/docs/DAC_TA.md                                        @hqt-7105
+/CLAUDE.md                                             @hqt-7105
