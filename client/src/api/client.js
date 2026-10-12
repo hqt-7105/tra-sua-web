@@ -5,6 +5,9 @@
 const BASE_URL = import.meta.env.VITE_API_URL || '/api';
 const TOKEN_KEY = 'may-admin-token';
 
+/** Phát ra khi phiên admin hết hạn/không hợp lệ (API trả 401): khung admin chuyển về trang đăng nhập. */
+export const ADMIN_LOGOUT_EVENT = 'may:admin-logout';
+
 /** Đường dẫn đầy đủ tới API, dùng cho EventSource (SSE) vốn không đi qua request(). */
 export const apiUrl = (path) => BASE_URL + path;
 
@@ -45,6 +48,10 @@ async function request(path, { headers, ...options } = {}) {
   });
   const body = await res.json().catch(() => null);
   if (!res.ok) {
+    if (res.status === 401 && path.startsWith('/admin') && path !== '/admin/login') {
+      adminToken.clear();
+      globalThis.dispatchEvent?.(new Event(ADMIN_LOGOUT_EVENT));
+    }
     const error = new Error(body?.error || `Lỗi ${res.status}`);
     error.status = res.status;
     error.owner = body?.owner; // API chưa cài (501) sẽ cho biết ai phụ trách
