@@ -1004,18 +1004,6 @@ html {
   font-size: 0.88rem;
 }
 
-.cart-empty {
-  background: var(--milk);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 32px 16px;
-}
-
-.cart-empty__icon {
-  font-size: 3rem;
-  margin: 0;
-}
-
 /* Ô tăng/giảm số lượng — dùng chung ở giỏ hàng và chi tiết món */
 .stepper {
   display: inline-flex;
@@ -1952,4 +1940,136 @@ textarea.input {
 
 .logo {
   white-space: nowrap;
+}
+
+/* ---------- Bộ giao diện dùng chung (C2, TV2): Skeleton, ErrorBox, EmptyState ---------- */
+.skeleton {
+  display: block;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--cream-2) 25%, #f9f1e6 50%, var(--cream-2) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-card .card__body {
+  gap: 10px;
+}
+
+.skeleton-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.skeleton-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.skeleton-line__text {
+  display: grid;
+  gap: 8px;
+  flex: 1;
+}
+
+.skeleton-detail {
+  margin-top: 16px;
+}
+
+.skeleton-detail__text {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.error-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px 14px;
+  margin: 16px 0;
+  padding: 16px 18px;
+  border: 1px solid #efc7bd;
+  border-radius: var(--radius);
+  background: #fbe9e5;
+  color: var(--danger);
+}
+
+.error-box__icon {
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+
+.error-box__text {
+  flex: 1;
+  min-width: 200px;
+}
+
+.error-box__text p {
+  margin: 4px 0 0;
+  color: var(--brown-2);
+}
+
+.error-box__retry {
+  align-self: center;
+}
+
+.error-box--compact {
+  margin: 8px 0;
+  padding: 12px 14px;
+}
+
+.empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 32px 16px;
+  text-align: center;
+  background: var(--milk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.empty-state__icon {
+  margin: 0;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.empty-state__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.empty-state__text {
+  margin: 0 0 8px;
+  max-width: 420px;
+}
+
+.empty-state--compact {
+  padding: 20px 16px;
+}
+
+.empty-state--compact .empty-state__icon {
+  font-size: 2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
 }

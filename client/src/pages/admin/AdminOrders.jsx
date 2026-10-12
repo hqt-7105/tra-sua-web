@@ -1,7 +1,9 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { api } from '../../api/client.js';
-import { ErrorBox, Loading } from '../../components/Status.jsx';
+import EmptyState from '../../components/EmptyState.jsx';
+import ErrorBox from '../../components/ErrorBox.jsx';
+import { SkeletonLines } from '../../components/Skeleton.jsx';
 import { useToast } from '../../hooks/useToast.js';
 import { formatPrice } from '../../utils/format.js';
 import {
@@ -136,9 +138,9 @@ export default function AdminOrders() {
         ))}
       </div>
 
-      {error && <ErrorBox error={error} />}
-      {!orders && !error && <Loading />}
-      {orders?.length === 0 && <p className="muted">Không có đơn nào ở trạng thái này.</p>}
+      {error && <ErrorBox error={error} title="Không tải được danh sách đơn" onRetry={load} />}
+      {!orders && !error && <SkeletonLines lines={4} />}
+      {orders?.length === 0 && <EmptyState compact icon="📭" title="Không có đơn nào ở trạng thái này" />}
 
       {orders?.length > 0 && (
         <table className="data-table">

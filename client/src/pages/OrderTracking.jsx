@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { api, apiUrl } from '../api/client.js';
 import { useOrderEvents } from '../hooks/useOrderEvents.js';
 import { useToast } from '../hooks/useToast.js';
-import { Loading } from '../components/Status.jsx';
+import ErrorBox from '../components/ErrorBox.jsx';
+import EmptyState from '../components/EmptyState.jsx';
+import { SkeletonLines } from '../components/Skeleton.jsx';
 import { formatPrice } from '../utils/format.js';
 import {
   ORDER_STEPS,
@@ -97,12 +99,15 @@ export default function OrderTracking() {
   if (loadError) {
     return (
       <section className="section">
-        <div className="container narrow center">
+        <div className="container narrow">
           <h1>Đơn hàng #{id}</h1>
-          <p className="error">
-            {loadError.status === 404 ? 'Không tìm thấy đơn. Bạn kiểm tra lại mã đơn nhé.' : loadError.message}
-          </p>
-          <Link to="/menu" className="btn">Về Menu</Link>
+          {loadError.status === 404 ? (
+            <EmptyState icon="🔍" title="Không tìm thấy đơn" actionLabel="Tra cứu đơn hàng" actionTo="/orders/lookup">
+              Bạn kiểm tra lại mã đơn, hoặc tra cứu bằng mã đơn và số điện thoại.
+            </EmptyState>
+          ) : (
+            <ErrorBox error={loadError} title="Không tải được đơn hàng" onRetry={load} />
+          )}
         </div>
       </section>
     );
@@ -112,7 +117,7 @@ export default function OrderTracking() {
     return (
       <section className="section">
         <div className="container narrow">
-          <Loading />
+          <SkeletonLines lines={3} />
         </div>
       </section>
     );

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../api/client.js';
 import PaymentMethodPicker from '../components/PaymentMethodPicker.jsx';
+import EmptyState from '../components/EmptyState.jsx';
 import VoucherInput from '../components/VoucherInput.jsx';
 import { useToast } from '../hooks/useToast.js';
 import { useCart } from '../store/useCart.js';
@@ -95,11 +96,9 @@ export default function Checkout() {
       <section className="section">
         <div className="container narrow center">
           <h1>Đặt hàng</h1>
-          <div className="cart-empty">
-            <p className="cart-empty__icon" aria-hidden>🧋</p>
-            <p className="lead">Giỏ hàng đang trống, chưa có gì để đặt.</p>
-            <Link to="/menu" className="btn">Xem menu</Link>
-          </div>
+          <EmptyState title="Giỏ hàng đang trống" actionLabel="Xem menu" actionTo="/menu">
+            Chưa có món nào để đặt.
+          </EmptyState>
         </div>
       </section>
     );
