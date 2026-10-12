@@ -204,6 +204,7 @@ code {
 .nav a {
   padding: 6px 12px;
   border-radius: 999px;
+  white-space: nowrap;
 }
 
 .nav a.active {
@@ -355,6 +356,9 @@ code {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .code {
@@ -362,6 +366,100 @@ code {
   padding: 8px 14px;
   border-radius: var(--radius-sm);
   font-weight: 700;
+}
+
+/* ---------- Landing: khuyến mãi, đánh giá, cửa hàng (TV2) ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
+.code {
+  font-weight: 500;
+}
+
+.code strong {
+  letter-spacing: 0.04em;
+}
+
+.code__min {
+  display: block;
+  font-size: 0.8rem;
+  color: #e9d6c3;
+}
+
+.hero__cup img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.reviews {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.review {
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+
+.review__stars {
+  color: var(--caramel);
+  letter-spacing: 2px;
+  margin: 0 0 6px;
+}
+
+.review blockquote {
+  margin: 0 0 10px;
+}
+
+.review__author {
+  margin: 0;
+}
+
+.store {
+  display: grid;
+  gap: 24px;
+  align-items: center;
+}
+
+.store__info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 16px;
+  margin: 0 0 20px;
+}
+
+.store__info dt {
+  font-weight: 700;
+}
+
+.store__info dd {
+  margin: 0;
+  color: var(--brown-2);
+}
+
+.store__map {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+@media (min-width: 768px) {
+  .reviews {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .store {
+    grid-template-columns: 1fr 1.2fr;
+  }
 }
 
 /* ---------- Cards ---------- */
@@ -493,6 +591,134 @@ code {
   margin-top: 16px;
 }
 
+/* ---------- Form tùy chỉnh món (TV3) ---------- */
+.customize {
+  margin-top: 20px;
+}
+
+.choice {
+  border: 0;
+  padding: 0;
+  margin: 0 0 18px;
+  min-width: 0;
+}
+
+.choice__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--milk);
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.pill input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pill--active {
+  background: var(--brown);
+  border-color: var(--brown);
+  color: var(--milk);
+}
+
+.pill:has(input:focus-visible) {
+  outline: 2px solid var(--caramel);
+  outline-offset: 2px;
+}
+
+.customize__rule {
+  margin: 0 0 18px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--cream-2);
+  color: var(--brown-2);
+  font-size: 0.9rem;
+}
+
+.topping-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--milk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.topping-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 8px 6px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.topping-row:last-child {
+  border-bottom: 0;
+}
+
+.topping-row__price {
+  color: var(--brown-2);
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.input--block {
+  width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+.customize__quantity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.customize__quantity .field__label {
+  margin: 0;
+}
+
+.customize__added {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: #f3f7ee;
+  color: var(--matcha);
+  font-weight: 600;
+}
+
+.buy-bar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  background: var(--cream);
+  border-top: 1px solid var(--line);
+}
+
+.buy-bar__label {
+  display: block;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
 /* ---------- Order steps ---------- */
 .steps {
   list-style: none;
@@ -528,6 +754,185 @@ code {
 .steps__item.active .steps__dot {
   background: var(--caramel);
   color: #fff;
+}
+
+/* ---------- Theo dõi đơn (TV5) ---------- */
+.steps__item.done {
+  color: var(--matcha);
+}
+
+.steps__item.done .steps__dot {
+  background: var(--matcha);
+  color: #fff;
+}
+
+.steps--cancelled .steps__item,
+.steps--cancelled .steps__item.active {
+  color: var(--brown-2);
+  font-weight: 400;
+  opacity: 0.55;
+}
+
+.steps--cancelled .steps__dot,
+.steps--cancelled .steps__item.active .steps__dot {
+  background: var(--cream-2);
+  color: var(--brown-2);
+}
+
+.order__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.order__head h1 {
+  margin: 0;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--cream-2);
+}
+
+.status-pill--pending {
+  background: #fdf0dc;
+  color: var(--caramel-dark);
+}
+
+.status-pill--preparing,
+.status-pill--delivering {
+  background: #e8f0fb;
+  color: #2f5d8c;
+}
+
+.status-pill--completed {
+  background: #eef3e6;
+  color: var(--matcha);
+}
+
+.status-pill--cancelled {
+  background: #fbe9e5;
+  color: var(--danger);
+}
+
+.panel {
+  background: var(--milk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+
+.panel--dashed {
+  border-style: dashed;
+}
+
+.panel__title {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.order__grid {
+  display: grid;
+  gap: 0 16px;
+}
+
+.order__line {
+  margin: 0 0 4px;
+}
+
+.pay--paid {
+  color: var(--matcha);
+  font-weight: 700;
+}
+
+.pay--failed {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.pay--pending {
+  color: var(--caramel-dark);
+  font-weight: 700;
+}
+
+.order-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.order-items__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.order-items__row .muted {
+  margin: 2px 0 0;
+  font-size: 0.88rem;
+}
+
+.order-items__row .price {
+  white-space: nowrap;
+}
+
+.summary {
+  margin: 12px 0 0;
+}
+
+.summary div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 0;
+}
+
+.summary dt {
+  color: var(--brown-2);
+}
+
+.summary dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.summary__total {
+  border-top: 1px solid var(--line);
+  margin-top: 6px;
+  padding-top: 8px !important;
+  font-size: 1.1rem;
+}
+
+.summary__total dt,
+.summary__total dd {
+  color: var(--brown);
+  font-weight: 800;
+}
+
+.history {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.92rem;
+}
+
+.order__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .order__grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /* ---------- Task notice (chỉ dùng khi đang phát triển) ---------- */
@@ -579,6 +984,195 @@ code {
   justify-content: flex-end;
   gap: 12px;
   margin-top: 8px;
+}
+
+/* ---------- Giỏ hàng (TV1) ---------- */
+.cart-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.cart-line {
+  display: grid;
+  gap: 12px;
+  background: var(--milk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.cart-line__name {
+  font-weight: 700;
+}
+
+.cart-line__name:hover {
+  color: var(--caramel-dark);
+}
+
+.cart-line__info .muted,
+.cart-line__unit {
+  margin: 4px 0 0;
+  font-size: 0.88rem;
+}
+
+.cart-line__unit {
+  color: var(--brown-2);
+}
+
+.cart-line__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.cart-line__controls .price {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.cart-line__remove {
+  color: var(--danger);
+}
+
+.cart__summary {
+  margin: 0;
+}
+
+.cart__note {
+  margin: 8px 0 0;
+  font-size: 0.88rem;
+}
+
+.cart-empty {
+  background: var(--milk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 32px 16px;
+}
+
+.cart-empty__icon {
+  font-size: 3rem;
+  margin: 0;
+}
+
+/* Ô tăng/giảm số lượng — dùng chung ở giỏ hàng và chi tiết món */
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--milk);
+}
+
+.stepper__btn {
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--brown);
+  cursor: pointer;
+}
+
+.stepper__btn:hover:not(:disabled) {
+  background: var(--cream-2);
+}
+
+.stepper__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.stepper__value {
+  min-width: 28px;
+  text-align: center;
+  font-weight: 700;
+}
+
+@media (min-width: 640px) {
+  .cart-line {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+}
+
+/* ---------- Mã giảm giá (TV4) ---------- */
+.field__label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.92rem;
+  margin-bottom: 6px;
+}
+
+.field__error {
+  color: var(--danger);
+  font-size: 0.88rem;
+  margin: 6px 0 0;
+}
+
+.link-btn {
+  font: inherit;
+  font-weight: 600;
+  color: var(--caramel-dark);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.voucher {
+  margin: 20px 0;
+}
+
+.voucher__row {
+  display: flex;
+  gap: 8px;
+}
+
+.voucher__row .input {
+  flex: 1;
+  min-width: 0;
+  text-transform: uppercase;
+}
+
+.voucher__applied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 2px dashed var(--matcha);
+  border-radius: var(--radius-sm);
+  background: #f3f7ee;
+}
+
+.voucher__applied .muted {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+.voucher__code {
+  letter-spacing: 0.04em;
+}
+
+.voucher__amount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  color: var(--matcha);
 }
 
 /* ---------- Cổng thanh toán giả & đăng nhập admin ---------- */
@@ -715,8 +1309,13 @@ code {
 
 /* ---------- Responsive ---------- */
 @media (max-width: 480px) {
+  .nav {
+    gap: 0;
+    font-size: 0.9rem;
+  }
+
   .nav a {
-    padding: 6px 8px;
+    padding: 6px 7px;
   }
 
   .logo span:last-child {

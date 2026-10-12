@@ -1,18 +1,18 @@
 import { Router } from 'express';
-import { notImplemented } from '../middlewares/errorHandler.js';
+import { createOrderItem } from '../services/orderItemService.js';
 
 const router = Router();
 
 /**
- * POST /api/cart/price  — TV3 (Builder + dùng Decorator có sẵn)
+ * POST /api/cart/price  — TV3 (Builder + Factory Method + Decorator có sẵn)
  *
  * Body:     { drinkId, size, sugar, ice, toppingIds: [], quantity, note }
- * Response: { description, size, sugar, ice, toppings: [...], quantity,
- *             unitPrice, totalPrice }
- *
- * Gợi ý: lấy drink + toppings từ menuRepository, dùng OrderItemBuilder dựng
- * món rồi trả builder.build().toJSON(). Lỗi đầu vào → HttpError(400, ...).
+ * Response: { drinkId, description, size, sugar, ice, toppings: [...], quantity,
+ *             note, unitPrice, totalPrice }
+ * Lỗi: 404 món/topping không có · 400 + field khi tùy chọn sai.
  */
-router.post('/price', notImplemented('TV3'));
+router.post('/price', (req, res) => {
+  res.json(createOrderItem(req.body).toJSON());
+});
 
 export default router;

@@ -1,10 +1,17 @@
 /**
  * ============================================================================
- * PATTERN: State (Behavioral) — PHỤ TRÁCH: TV5            [Sprint 1 - CHƯA LÀM]
+ * PATTERN: State (Behavioral) — PHỤ TRÁCH: TV5
  * ============================================================================
  * Vấn đề:
  *   Đơn hàng đi qua nhiều trạng thái, mỗi trạng thái chỉ cho phép một số thao
  *   tác. Viết if (status === ...) rải rác khắp nơi rất dễ sai và khó mở rộng.
+ *
+ * Giải pháp:
+ *   Mỗi trạng thái là một lớp ConcreteState. Order (Context) không tự kiểm tra
+ *   trạng thái mà ủy quyền next()/cancel()/allowedActions() cho State hiện tại.
+ *   State tự quyết định chuyển sang State nào bằng order.setState(...). Thao
+ *   tác không hợp lệ rơi vào hành vi mặc định của OrderState: ném
+ *   InvalidTransitionError (409). Thêm trạng thái mới = thêm một lớp.
  *
  * Vòng đời:
  *   PENDING ──next──▶ PREPARING ──next──▶ DELIVERING ──next──▶ COMPLETED
@@ -18,7 +25,7 @@
  *   ConcreteState  = PendingState, PreparingState, DeliveringState,
  *                    CompletedState, CancelledState
  *
- * Hợp đồng:
+ * Hợp đồng / Ví dụ:
  *   const order = new Order({ id: 'DH001', customerName: 'An', total: 47000 });
  *   order.getStatus()          // 'PENDING'
  *   order.next()               // → 'PREPARING'
@@ -27,13 +34,24 @@
  *   order.history              // [{ from, to, at }] mỗi lần chuyển trạng thái
  *   Chuyển không hợp lệ → throw InvalidTransitionError (route trả 409)
  *
- * Test chấp nhận: tests/state.test.js (bỏ `todo` khi làm xong)
+ * Test chấp nhận: tests/state.test.js
  * ============================================================================
  */
 
+const STATUS_LABELS = {
+  PENDING: 'Chờ xác nhận',
+  PREPARING: 'Đang pha chế',
+  DELIVERING: 'Đang giao',
+  COMPLETED: 'Hoàn thành',
+  CANCELLED: 'Đã hủy',
+};
+const ACTION_LABELS = { next: 'chuyển sang bước tiếp theo', cancel: 'hủy đơn' };
+
 export class InvalidTransitionError extends Error {
   constructor(from, action) {
-    super(`Không thể "${action}" khi đơn đang ở trạng thái ${from}`);
+    super(
+      `Không thể ${ACTION_LABELS[action] ?? action} khi đơn đang ở trạng thái "${STATUS_LABELS[from] ?? from}"`,
+    );
     this.status = 409;
   }
 }
@@ -58,16 +76,72 @@ export class OrderState {
   }
 }
 
-// TODO(TV5): cài các ConcreteState
+/** Chờ xác nhận: được xác nhận (→ PREPARING). */
 export class PendingState extends OrderState {
   get name() {
     return 'PENDING';
   }
+
+  next(order) {
+    order.setState(new PreparingState());
+  }
+
+  cancel(order) {
+    order.setState(new CancelledState());
+  }
+
+  allowedActions() {
+    return ['next', 'cancel'];
+  }
 }
-// export class PreparingState extends OrderState { ... }
-// export class DeliveringState extends OrderState { ... }
-// export class CompletedState extends OrderState { ... }
-// export class CancelledState extends OrderState { ... }
+
+/** Đang pha chế: được giao hàng (→ DELIVERING) hoặc hủy. */
+export class PreparingState extends OrderState {
+  get name() {
+    return 'PREPARING';
+  }
+
+  next(order) {
+    order.setState(new DeliveringState());
+  }
+
+  cancel(order) {
+    order.setState(new CancelledState());
+  }
+
+  allowedActions() {
+    return ['next', 'cancel'];
+  }
+}
+
+/** Đang giao: chỉ được hoàn thành (→ COMPLETED), không hủy được nữa. */
+export class DeliveringState extends OrderState {
+  get name() {
+    return 'DELIVERING';
+  }
+
+  next(order) {
+    order.setState(new CompletedState());
+  }
+
+  allowedActions() {
+    return ['next'];
+  }
+}
+
+/** Hoàn thành: trạng thái cuối, mọi thao tác bị từ chối (dùng mặc định của OrderState). */
+export class CompletedState extends OrderState {
+  get name() {
+    return 'COMPLETED';
+  }
+}
+
+/** Đã hủy: trạng thái cuối, mọi thao tác bị từ chối. */
+export class CancelledState extends OrderState {
+  get name() {
+    return 'CANCELLED';
+  }
+}
 
 /** Context */
 export class Order {
@@ -113,8 +187,9 @@ export class Order {
     return this.state.name;
   }
 
-  /** Chỉ các State gọi hàm này. TODO(TV5): ghi lại history { from, to, at } */
+  /** Chỉ các State gọi hàm này. Mỗi lần chuyển ghi lịch sử { from, to, at } (BR15). */
   setState(state) {
+    this.history.push({ from: this.state.name, to: state.name, at: new Date().toISOString() });
     this.state = state;
   }
 

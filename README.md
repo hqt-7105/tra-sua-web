@@ -50,7 +50,7 @@ tra-sua-web/
 │   │   ├── config.js          # phí ship, giờ mở cửa, phương thức thanh toán
 │   │   ├── events.js          # instance Observer dùng chung
 │   │   ├── data/              # JSON: danh mục, món, topping, tùy chọn, tài khoản demo
-│   │   ├── domain/            # Drink (lớp gốc)
+│   │   ├── domain/            # Drink (lớp gốc), drinks/ (MilkTea, FruitTea, Coffee, IceBlended - TV1)
 │   │   ├── integrations/      # SDK MoMo / VNPay GIẢ LẬP (Adaptee)
 │   │   ├── middlewares/       # lỗi, xác thực
 │   │   ├── patterns/
@@ -59,7 +59,7 @@ tra-sua-web/
 │   │   │   └── behavioral/    # DiscountStrategy, OrderState, OrderEvents, OrderValidation
 │   │   ├── repositories/      # đọc/ghi dữ liệu (menu, đơn hàng)
 │   │   ├── routes/            # API
-│   │   ├── services/          # authService, (voucherService, menuService... thành viên tạo)
+│   │   ├── services/          # authService, voucherService, orderItemService (Director của Builder), ...
 │   │   └── utils/             # password.js (scrypt)
 │   └── tests/
 └── docs/
@@ -76,15 +76,15 @@ tra-sua-web/
 
 | Nhóm | Pattern | File | Phụ trách | Trạng thái |
 |---|---|---|---|---|
-| Creational | Factory Method | `server/src/patterns/creational/DrinkFactory.js` | TV1 | ⏳ Sprint 1 |
-| Creational | Singleton | `client/src/store/cartStore.js` | TV2 | ⏳ Sprint 1 |
-| Creational | Builder | `server/src/patterns/creational/OrderItemBuilder.js` | TV3 | ⏳ Sprint 1 |
+| Creational | Factory Method | `server/src/patterns/creational/DrinkFactory.js` | TV1 | ✅ Xong ([docs](docs/patterns/factory-method.md)) |
+| Creational | Singleton | `client/src/store/cartStore.js` | TV2 | ✅ Xong ([docs](docs/patterns/singleton.md)) |
+| Creational | Builder | `server/src/patterns/creational/OrderItemBuilder.js` | TV3 | ✅ Xong ([docs](docs/patterns/builder.md)) |
 | Structural | Decorator | `server/src/patterns/structural/ToppingDecorator.js` | — | ✅ Mẫu |
 | Structural | Facade | `server/src/patterns/structural/OrderFacade.js` | TV1 | ⏳ Sprint 2 |
 | Structural | Adapter | `server/src/patterns/structural/PaymentAdapter.js` | TV3 | ⏳ Sprint 2 |
 | Structural | Proxy | `server/src/patterns/structural/MenuServiceProxy.js` | TV4 | ⏳ Sprint 2 |
-| Behavioral | Strategy | `server/src/patterns/behavioral/DiscountStrategy.js` | TV4 | ⏳ Sprint 1 |
-| Behavioral | State | `server/src/patterns/behavioral/OrderState.js` | TV5 | ⏳ Sprint 1 |
+| Behavioral | Strategy | `server/src/patterns/behavioral/DiscountStrategy.js` | TV4 | ✅ Xong ([docs](docs/patterns/strategy.md)) |
+| Behavioral | State | `server/src/patterns/behavioral/OrderState.js` | TV5 | ✅ Xong ([docs](docs/patterns/state.md)) |
 | Behavioral | Observer | `server/src/patterns/behavioral/OrderEvents.js` | TV2 | ⏳ Sprint 2 |
 | Behavioral | Chain of Responsibility | `server/src/patterns/behavioral/OrderValidation.js` | TV5 | ⏳ Sprint 2 |
 

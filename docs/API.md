@@ -8,14 +8,15 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
 |---|---|---|---|
 | GET | `/health` | ✅ Xong | — |
 | GET | `/categories` | ✅ Xong | — |
-| GET | `/drinks?categoryId=&bestSeller=true&q=` | ✅ Xong (TV1 refactor dùng Factory) | TV1 |
-| GET | `/drinks/:id` | ✅ Xong (TV1 refactor dùng Factory) | TV1 |
+| GET | `/drinks?categoryId=&bestSeller=true&q=` | ✅ Xong (Factory Method) | TV1 |
+| GET | `/drinks/:id` | ✅ Xong (Factory Method) | TV1 |
 | GET | `/toppings` | ✅ Xong | — |
 | GET | `/options` | ✅ Xong | — |
-| POST | `/cart/price` | ⏳ S1 | TV3 |
-| POST | `/vouchers/validate` | ⏳ S1 | TV4 |
-| GET | `/orders/:id` | ⏳ S1 | TV5 |
-| PATCH | `/orders/:id/status` | ⏳ S1 | TV5 |
+| POST | `/cart/price` | ✅ Xong (Builder) | TV3 |
+| GET | `/vouchers` | ✅ Xong | TV4 |
+| POST | `/vouchers/validate` | ✅ Xong (Strategy) | TV4 |
+| GET | `/orders/:id` | ✅ Xong (State) | TV5 |
+| PATCH | `/orders/:id/status` | ✅ Xong (State) | TV5 |
 | POST | `/orders` | ⏳ S2 (Facade) | TV1 |
 | GET | `/orders/:id/events` | ⏳ S2 (SSE) | TV2 |
 | GET | `/payments/methods` | ⏳ S2 | TV3 |
@@ -42,12 +43,12 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
   "name": "Trà sữa truyền thống",
   "basePrice": 35000,
   "description": "Hồng trà đậm vị pha sữa béo nhẹ, công thức nhà làm.",
-  "image": null,
+  "image": "/images/drinks/ts-truyen-thong.svg",
   "isBestSeller": true,
   "isActive": true
 }
 ```
-Sau khi TV1 làm xong, có thêm:
+Mỗi món còn có thêm phần do loại đồ uống tự mô tả (Factory Method, TV1), cả ở `GET /drinks`:
 ```json
 { "categoryName": "Trà sữa", "customization": { "allowToppings": true, "allowSugar": true, "allowIce": true } }
 ```
@@ -85,6 +86,10 @@ Response `200`:
 }
 ```
 Lỗi: `404` món/topping không tồn tại · `400` size, đường, đá, số lượng không hợp lệ.
+`400` luôn kèm `field` (`drinkId`, `size`, `sugar`, `ice`, `toppingIds`, `quantity`, `note`). Số lượng 1–20 (BR13), ghi chú tối đa 200 ký tự.
+Loại đồ uống không cho phép cũng trả `400`: cà phê thêm topping (`toppingIds`), đá xay chỉnh mức đá (`ice`), xem `customization` ở `GET /drinks/:id`.
+Món không chỉnh được mức đá (đá xay) trả `"ice": null` (không áp dụng); gửi lên `ice` mặc định (100) hoặc bỏ trống đều được.
+Thiếu `size`/`sugar`/`ice`/`quantity`/`note` thì dùng mặc định (BR03). Giá luôn do server tính, mọi trường giá gửi lên bị bỏ qua.
 
 ### `POST /vouchers/validate` — TV4
 Request: `{ "code": "MAY10", "subtotal": 100000, "shippingFee": 15000 }`
@@ -93,9 +98,16 @@ Response `200`:
 { "code": "MAY10", "type": "percent", "discount": 10000, "total": 105000,
   "message": "Giảm 10% (tối đa 20.000đ)" }
 ```
-Lỗi: `404` mã không tồn tại · `400` hết hạn, hết lượt, chưa đủ giá trị đơn tối thiểu.
+Lỗi: `404` mã không tồn tại · `400` hết hạn, hết lượt, chưa đủ giá trị đơn tối thiểu · `400` + `field` (`code`, `subtotal`, `shippingFee`) khi dữ liệu gửi lên sai kiểu.
+Mã không phân biệt hoa thường. Thiếu `shippingFee` thì server dùng `config.shippingFee`.
 
-Mẫu `server/src/data/vouchers.json`:
+### `GET /vouchers` — TV4
+Các mã còn dùng được (chưa hết hạn, còn lượt), dùng cho mục Khuyến mãi ở trang chủ.
+```json
+[{ "code": "MAY10", "type": "percent", "message": "Giảm 10% (tối đa 20.000đ)", "minOrder": 50000, "expiresAt": "2026-12-31T23:59:59+07:00" }]
+```
+
+Mẫu `server/src/data/vouchers.json` (thêm `HETLUOT` có `usageLimit`/`usedCount` để thử lỗi hết lượt):
 ```json
 [
   { "code": "MAY10", "type": "percent", "value": 10, "maxDiscount": 20000, "minOrder": 50000, "expiresAt": "2026-12-31T23:59:59+07:00" },

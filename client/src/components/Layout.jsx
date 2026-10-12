@@ -1,6 +1,8 @@
 import { Link, NavLink, Outlet } from 'react-router-dom';
+import { useCart } from '../store/useCart.js';
 
 function Header() {
+  const { count } = useCart();
   return (
     <header className="header">
       <div className="container header__inner">
@@ -11,9 +13,8 @@ function Header() {
         <nav className="nav">
           <NavLink to="/" end>Trang chủ</NavLink>
           <NavLink to="/menu">Menu</NavLink>
-          {/* TODO(TV2): hiện số ly trong giỏ bằng useCart() */}
-          <NavLink to="/cart" className="nav__cart">
-            Giỏ hàng <span className="badge">0</span>
+          <NavLink to="/cart" className="nav__cart" aria-label={`Giỏ hàng, ${count} ly`}>
+            Giỏ hàng <span className="badge">{count}</span>
           </NavLink>
         </nav>
       </div>

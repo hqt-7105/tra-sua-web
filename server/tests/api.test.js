@@ -55,8 +55,8 @@ test('GET /toppings và /options', async () => {
   assert.deepEqual(body.defaults, { size: 'M', sugar: 100, ice: 100, quantity: 1 });
 });
 
-test('API của Sprint 1 đang trả 501 kèm tên người phụ trách', async () => {
-  const res = await fetch(`${baseUrl}/orders/DH001`);
-  assert.equal(res.status, 501);
-  assert.equal((await res.json()).owner, 'TV5');
+test('đường dẫn API không tồn tại trả 404 kèm thông báo tiếng Việt', async () => {
+  const { status, body } = await get('/khong-co-route-nay');
+  assert.equal(status, 404);
+  assert.match(body.error, /Không tìm thấy/);
 });
