@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import VoucherInput from '../components/VoucherInput.jsx';
+import EmptyState from '../components/EmptyState.jsx';
 import { useCart } from '../store/useCart.js';
 import { MAX_QUANTITY } from '../store/cartStore.js';
 import { formatPrice } from '../utils/format.js';
@@ -63,11 +64,9 @@ export default function Cart() {
       <section className="section">
         <div className="container narrow center">
           <h1>Giỏ hàng</h1>
-          <div className="cart-empty">
-            <p className="cart-empty__icon" aria-hidden>🧋</p>
-            <p className="lead">Giỏ hàng đang trống. Chọn một ly trà sữa thật ngon nhé!</p>
-            <Link to="/menu" className="btn">Xem menu</Link>
-          </div>
+          <EmptyState title="Giỏ hàng đang trống" actionLabel="Xem menu" actionTo="/menu">
+            Chọn một ly trà sữa thật ngon nhé!
+          </EmptyState>
         </div>
       </section>
     );

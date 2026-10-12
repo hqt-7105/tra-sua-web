@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useFetch } from '../api/useFetch.js';
 import DrinkCard from '../components/DrinkCard.jsx';
-import { Loading, ErrorBox } from '../components/Status.jsx';
+import ErrorBox from '../components/ErrorBox.jsx';
+import { SkeletonCards } from '../components/Skeleton.jsx';
 import { formatPrice } from '../utils/format.js';
 
 const REVIEWS = [
@@ -53,7 +54,7 @@ function Promotions() {
 
 /** Landing page — TV2. */
 export default function Home() {
-  const { data: bestSellers, loading, error } = useFetch('/drinks?bestSeller=true');
+  const { data: bestSellers, loading, error, reload } = useFetch('/drinks?bestSeller=true');
 
   return (
     <>
@@ -91,8 +92,8 @@ export default function Home() {
             <h2>Món bán chạy</h2>
             <Link to="/menu" className="link">Xem cả menu →</Link>
           </div>
-          {loading && <Loading />}
-          {error && <ErrorBox error={error} />}
+          {loading && <SkeletonCards count={4} />}
+          {error && <ErrorBox error={error} title="Không tải được món bán chạy" onRetry={reload} />}
           {bestSellers && (
             <div className="grid">
               {bestSellers.map((drink) => (

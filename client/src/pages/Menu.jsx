@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useFetch } from '../api/useFetch.js';
 import DrinkCard from '../components/DrinkCard.jsx';
-import { Loading, ErrorBox } from '../components/Status.jsx';
+import ErrorBox from '../components/ErrorBox.jsx';
+import EmptyState from '../components/EmptyState.jsx';
+import { SkeletonCards } from '../components/Skeleton.jsx';
 
 export default function Menu() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,7 +15,7 @@ export default function Menu() {
   const query = new URLSearchParams();
   if (categoryId) query.set('categoryId', categoryId);
   if (keyword.trim()) query.set('q', keyword.trim());
-  const { data: drinks, loading, error } = useFetch(`/drinks?${query}`);
+  const { data: drinks, loading, error, reload } = useFetch(`/drinks?${query}`);
 
   const selectCategory = (id) => setSearchParams(id ? { category: id } : {});
 
@@ -53,9 +55,21 @@ export default function Menu() {
           ))}
         </div>
 
-        {loading && !drinks && <Loading />}
-        {error && <ErrorBox error={error} />}
-        {drinks && drinks.length === 0 && <p className="muted center">Không tìm thấy món phù hợp.</p>}
+        {loading && !drinks && <SkeletonCards count={6} />}
+        {error && <ErrorBox error={error} title="Không tải được thực đơn" onRetry={reload} />}
+        {drinks && drinks.length === 0 && (
+          <EmptyState
+            icon="🔍"
+            title="Không tìm thấy món phù hợp"
+            actionLabel="Xem tất cả món"
+            onAction={() => {
+              setKeyword('');
+              selectCategory('');
+            }}
+          >
+            Thử từ khóa khác, ví dụ &quot;trà đào&quot; hoặc &quot;matcha&quot;.
+          </EmptyState>
+        )}
         {drinks && (
           <div className="grid">
             {drinks.map((drink) => (

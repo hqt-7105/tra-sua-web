@@ -1,5 +1,6 @@
 import { useFetch } from '../api/useFetch.js';
-import { ErrorBox, Loading } from './Status.jsx';
+import ErrorBox from './ErrorBox.jsx';
+import { SkeletonLines } from './Skeleton.jsx';
 
 /**
  * Chọn phương thức thanh toán — TV3 (Adapter). Danh sách lấy từ GET /api/payments/methods,
@@ -18,13 +19,15 @@ const HINTS = {
 };
 
 export default function PaymentMethodPicker({ value, onChange, error }) {
-  const { data: methods, loading, error: loadError } = useFetch('/payments/methods');
+  const { data: methods, loading, error: loadError, reload } = useFetch('/payments/methods');
 
   return (
     <fieldset className="choice pay-methods" aria-describedby={error ? 'payment-method-error' : undefined}>
       <legend className="field__label">Phương thức thanh toán</legend>
-      {loading && <Loading />}
-      {loadError && <ErrorBox error={loadError} />}
+      {loading && <SkeletonLines lines={3} />}
+      {loadError && (
+        <ErrorBox error={loadError} title="Không tải được phương thức thanh toán" onRetry={reload} compact />
+      )}
       {methods && (
         <div className="pay-methods__list">
           {methods.map((method) => (

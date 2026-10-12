@@ -3,7 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 import { api } from '../api/client.js';
 import { useFetch } from '../api/useFetch.js';
 import DrinkThumb from '../components/DrinkThumb.jsx';
-import { Loading, ErrorBox } from '../components/Status.jsx';
+import ErrorBox from '../components/ErrorBox.jsx';
+import EmptyState from '../components/EmptyState.jsx';
+import { SkeletonDetail } from '../components/Skeleton.jsx';
 import { useCart } from '../store/useCart.js';
 import { MAX_QUANTITY } from '../store/cartStore.js';
 import { formatPrice } from '../utils/format.js';
@@ -271,8 +273,19 @@ export default function DrinkDetail() {
     <section className="section">
       <div className="container">
         <Link to="/menu" className="link">← Quay lại menu</Link>
-        {error && <ErrorBox error={error} />}
-        {!error && !ready && <Loading />}
+        {error && drink.error?.status === 404 && (
+          <EmptyState icon="🔍" title="Không tìm thấy món" actionLabel="Về menu" actionTo="/menu">
+            Món này không có hoặc đã ngừng bán.
+          </EmptyState>
+        )}
+        {error && drink.error?.status !== 404 && (
+          <ErrorBox
+            error={error}
+            title="Không tải được món"
+            onRetry={() => [drink, options, toppings].forEach((request) => request.reload())}
+          />
+        )}
+        {!error && !ready && <SkeletonDetail />}
         {!error && ready && (
           <div className="detail">
             <DrinkThumb drink={drink.data} size="lg" />

@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { api } from './client.js';
 
-/** Hook GET đơn giản: const { data, loading, error } = useFetch('/drinks') */
+/**
+ * Hook GET đơn giản: const { data, loading, error, reload } = useFetch('/drinks')
+ * reload() gọi lại API (dùng cho nút "Thử lại" của ErrorBox).
+ */
 export function useFetch(path) {
   const [state, setState] = useState({ data: null, loading: true, error: null });
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -15,7 +19,8 @@ export function useFetch(path) {
     return () => {
       cancelled = true;
     };
-  }, [path]);
+  }, [path, attempt]);
 
-  return state;
+  const reload = useCallback(() => setAttempt((n) => n + 1), []);
+  return { ...state, reload };
 }

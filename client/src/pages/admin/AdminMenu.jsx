@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { api } from '../../api/client.js';
-import { ErrorBox, Loading } from '../../components/Status.jsx';
+import EmptyState from '../../components/EmptyState.jsx';
+import ErrorBox from '../../components/ErrorBox.jsx';
+import { SkeletonLines } from '../../components/Skeleton.jsx';
 import { useToast } from '../../hooks/useToast.js';
 import { formatPrice } from '../../utils/format.js';
 import { formatDateTime } from '../../utils/orderLabels.js';
@@ -233,8 +235,8 @@ function DrinksTab() {
     api.get('/categories').then(setCategories).catch(() => setCategories([]));
   }, []);
 
-  if (error) return <ErrorBox error={error} />;
-  if (!drinks) return <Loading />;
+  if (error) return <ErrorBox error={error} title="Không tải được danh sách món" onRetry={load} />;
+  if (!drinks) return <SkeletonLines lines={5} />;
   const categoryName = (id) => categories.find((c) => c.id === id)?.name ?? id;
 
   return (
@@ -295,8 +297,8 @@ function ToppingsTab() {
   const { items: toppings, error, load, toggleActive } = useAdminList('/admin/toppings');
   const [editing, setEditing] = useState(null);
 
-  if (error) return <ErrorBox error={error} />;
-  if (!toppings) return <Loading />;
+  if (error) return <ErrorBox error={error} title="Không tải được danh sách topping" onRetry={load} />;
+  if (!toppings) return <SkeletonLines lines={4} />;
 
   return (
     <>
@@ -351,9 +353,11 @@ function AuditTab() {
       .catch((error) => setState({ entries: null, error }));
   }, []);
 
-  if (state.error) return <ErrorBox error={state.error} />;
-  if (!state.entries) return <Loading />;
-  if (state.entries.length === 0) return <p className="muted">Chưa có thao tác sửa menu nào.</p>;
+  if (state.error) return <ErrorBox error={state.error} title="Không tải được nhật ký" />;
+  if (!state.entries) return <SkeletonLines lines={3} />;
+  if (state.entries.length === 0) {
+    return <EmptyState compact icon="📝" title="Chưa có thao tác sửa menu nào" />;
+  }
 
   return (
     <table className="data-table">
