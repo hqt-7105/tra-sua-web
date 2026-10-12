@@ -15,6 +15,7 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
 | POST | `/cart/price` | ✅ Xong (Builder) | TV3 |
 | GET | `/vouchers` | ✅ Xong | TV4 |
 | POST | `/vouchers/validate` | ✅ Xong (Strategy) | TV4 |
+| GET | `/orders/lookup?id=&phone=` | ✅ Xong (tra cứu đơn, C5) | TV5 |
 | GET | `/orders/:id` | ✅ Xong (State) | TV5 |
 | PATCH | `/orders/:id/status` | ✅ Xong (State) | TV5 |
 | POST | `/orders` | ✅ Xong (Facade) | TV1 |
@@ -128,6 +129,11 @@ Response `200`:
 }
 ```
 Lỗi: `404` không có đơn.
+
+### `GET /orders/lookup?id=DH004&phone=0912345678` — TV5 (C5)
+Khách xem lại đơn không cần tài khoản. Trả đơn (cùng dạng `GET /orders/:id`) khi **mã đơn và số điện thoại đều khớp**.
+Mã đơn không phân biệt hoa thường; số điện thoại so sau khi chuẩn hóa (`+84912345678` = `0912345678`).
+Lỗi: `404` "Không tìm thấy đơn hàng" khi sai số điện thoại **hoặc** không có đơn (cùng thông báo, không để lộ đơn có tồn tại) · `400` thiếu tham số (`field`: `id` hoặc `phone`).
 
 ### `PATCH /orders/:id/status` — TV5
 Request: `{ "action": "next" }` hoặc `{ "action": "cancel" }`

@@ -37,6 +37,9 @@ function Footer() {
         <div>
           <strong>Liên hệ</strong>
           <p>Hotline 0900 000 000</p>
+          <p>
+            <Link to="/orders/lookup" className="footer__link">Tra cứu đơn hàng</Link>
+          </p>
         </div>
       </div>
       <p className="footer__note">Đồ án môn Mẫu thiết kế · Nhóm 5 người</p>

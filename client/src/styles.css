@@ -1785,3 +1785,33 @@ textarea.input {
     grid-template-columns: 240px minmax(0, 1fr);
   }
 }
+
+/* ---------- Tra cứu đơn (TV5, C5) ---------- */
+.lookup__fields {
+  display: grid;
+  gap: 12px 16px;
+  margin-bottom: 14px;
+}
+
+.lookup__id {
+  text-transform: uppercase;
+}
+
+.lookup__result {
+  margin-top: 16px;
+}
+
+.lookup__track {
+  margin-top: 14px;
+}
+
+.footer__link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (min-width: 640px) {
+  .lookup__fields {
+    grid-template-columns: 1fr 1fr;
+  }
+}

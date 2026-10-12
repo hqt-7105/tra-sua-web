@@ -1,5 +1,8 @@
 import { Router } from 'express';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
+import { HttpError } from '../middlewares/errorHandler.js';
+import { orderRepository } from '../repositories/orderRepository.js';
+import { validatePhone } from '../utils/validators.js';
 import { customerStream } from '../events.js';
 import { openEventStream } from '../utils/sse.js';
 import { changeOrderStatus, findOrderOr404 } from '../services/orderStatusService.js';
@@ -20,6 +23,32 @@ router.post(
     res.status(201).json(await orderFacade.placeOrder(req.body ?? {}));
   }),
 );
+
+/**
+ * GET /api/orders/lookup?id=DH004&phone=0912345678 — TV5 (C5)
+ *   Khách xem lại đơn không cần tài khoản: trả đơn (cùng dạng GET /:id) khi mã đơn VÀ
+ *   số điện thoại khớp. SĐT so sau khi chuẩn hóa (+84 → 0, bỏ khoảng trắng).
+ *   Sai SĐT hoặc không có đơn → cùng 404 'Không tìm thấy đơn hàng' (không để lộ đơn có tồn tại).
+ *   Thiếu tham số → 400 kèm field 'id' | 'phone'.
+ *   Đặt TRƯỚC GET /:id để '/lookup' không bị hiểu là mã đơn.
+ */
+const normalizePhone = (value) => {
+  const result = validatePhone(value);
+  return result.ok ? result.value : String(value).trim();
+};
+
+router.get('/lookup', (req, res) => {
+  const id = typeof req.query.id === 'string' ? req.query.id.trim().toUpperCase() : '';
+  const phone = typeof req.query.phone === 'string' ? req.query.phone.trim() : '';
+  if (!id) throw Object.assign(new HttpError(400, 'Vui lòng nhập mã đơn hàng'), { field: 'id' });
+  if (!phone) throw Object.assign(new HttpError(400, 'Vui lòng nhập số điện thoại đặt hàng'), { field: 'phone' });
+
+  const order = orderRepository.findById(id);
+  if (!order || normalizePhone(order.phone) !== normalizePhone(phone)) {
+    throw new HttpError(404, 'Không tìm thấy đơn hàng');
+  }
+  res.json(order);
+});
 
 /**
  * GET /api/orders/:id/events — TV2 (Observer, SSE)
