@@ -591,6 +591,134 @@ html {
   margin-top: 16px;
 }
 
+/* ---------- Form tùy chỉnh món (TV3) ---------- */
+.customize {
+  margin-top: 20px;
+}
+
+.choice {
+  border: 0;
+  padding: 0;
+  margin: 0 0 18px;
+  min-width: 0;
+}
+
+.choice__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--milk);
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.pill input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pill--active {
+  background: var(--brown);
+  border-color: var(--brown);
+  color: var(--milk);
+}
+
+.pill:has(input:focus-visible) {
+  outline: 2px solid var(--caramel);
+  outline-offset: 2px;
+}
+
+.customize__rule {
+  margin: 0 0 18px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--cream-2);
+  color: var(--brown-2);
+  font-size: 0.9rem;
+}
+
+.topping-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--milk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.topping-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 8px 6px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.topping-row:last-child {
+  border-bottom: 0;
+}
+
+.topping-row__price {
+  color: var(--brown-2);
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.input--block {
+  width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+.customize__quantity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.customize__quantity .field__label {
+  margin: 0;
+}
+
+.customize__added {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: #f3f7ee;
+  color: var(--matcha);
+  font-weight: 600;
+}
+
+.buy-bar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  background: var(--cream);
+  border-top: 1px solid var(--line);
+}
+
+.buy-bar__label {
+  display: block;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
 /* ---------- Order steps ---------- */
 .steps {
   list-style: none;

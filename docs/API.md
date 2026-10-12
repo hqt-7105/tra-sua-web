@@ -12,7 +12,7 @@ Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <tok
 | GET | `/drinks/:id` | ✅ Xong (Factory Method) | TV1 |
 | GET | `/toppings` | ✅ Xong | — |
 | GET | `/options` | ✅ Xong | — |
-| POST | `/cart/price` | ⏳ S1 | TV3 |
+| POST | `/cart/price` | ✅ Xong (Builder) | TV3 |
 | GET | `/vouchers` | ✅ Xong | TV4 |
 | POST | `/vouchers/validate` | ✅ Xong (Strategy) | TV4 |
 | GET | `/orders/:id` | ✅ Xong (State) | TV5 |
@@ -86,6 +86,9 @@ Response `200`:
 }
 ```
 Lỗi: `404` món/topping không tồn tại · `400` size, đường, đá, số lượng không hợp lệ.
+`400` luôn kèm `field` (`drinkId`, `size`, `sugar`, `ice`, `toppingIds`, `quantity`, `note`). Số lượng 1–20 (BR13), ghi chú tối đa 200 ký tự.
+Loại đồ uống không cho phép cũng trả `400`: cà phê thêm topping (`toppingIds`), đá xay chỉnh mức đá (`ice`), xem `customization` ở `GET /drinks/:id`.
+Thiếu `size`/`sugar`/`ice`/`quantity`/`note` thì dùng mặc định (BR03). Giá luôn do server tính, mọi trường giá gửi lên bị bỏ qua.
 
 ### `POST /vouchers/validate` — TV4
 Request: `{ "code": "MAY10", "subtotal": 100000, "shippingFee": 15000 }`
