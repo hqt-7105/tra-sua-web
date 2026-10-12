@@ -1,0 +1,29 @@
+# CI — B1 (TV1): tự chạy test cho mỗi Pull Request vào dev và main.
+# PR chỉ được merge khi dấu kiểm này xanh (bật "Require status checks" trong Settings → Branches).
+name: Kiểm thử
+
+on:
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  test:
+    name: npm test (Node 22)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lấy mã nguồn
+        uses: actions/checkout@v4
+
+      - name: Cài Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Cài thư viện đúng theo package-lock.json
+        run: npm ci
+
+      - name: Chạy toàn bộ test (server + client)
+        run: npm test
+
+      - name: Build frontend (bắt lỗi cú pháp JSX mà test không chạy tới)
+        run: npm run build

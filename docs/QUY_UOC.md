@@ -39,6 +39,20 @@ Checklist khi tạo PR (copy vào mô tả PR):
 
 Người review kiểm tra: đúng hợp đồng (contract) trong file khung, pattern đúng cấu trúc GoF, đặt tên rõ ràng, không để `console.log` thừa.
 
+## 2b. Ai review cho ai
+
+Mỗi PR cần **1 người duyệt** theo vòng tròn dưới (GitHub cũng tự gắn chủ file qua `.github/CODEOWNERS`). Người review vắng quá 1 ngày thì người kế tiếp trong vòng duyệt thay.
+
+| Người mở PR | Sprint 1 · task bổ sung B (TV1 → TV2 → TV3 → TV4 → TV5 → TV1) | Sprint 2 · task bổ sung C (đảo chiều) |
+|---|---|---|
+| TV1 | TV2 | TV5 |
+| TV2 | TV3 | TV1 |
+| TV3 | TV4 | TV2 |
+| TV4 | TV5 | TV3 |
+| TV5 | TV1 | TV4 |
+
+CI (`.github/workflows/test.yml`) chạy `npm ci`, `npm test`, `npm run build` trên Node 22 cho mọi PR vào `dev`/`main`: dấu ✅ xanh mới được merge. Gặp lỗi git: `docs/HUONG_DAN_GIT.md`.
+
 ## 3. Code
 
 - **Tên biến, hàm, lớp: tiếng Anh.** Chú thích và thông báo lỗi cho người dùng: tiếng Việt.
