@@ -76,19 +76,21 @@ tra-sua-web/
 
 ## Bản đồ Design Pattern (11 pattern)
 
-| Nhóm | Pattern | File | Phụ trách | Trạng thái |
-|---|---|---|---|---|
-| Creational | Factory Method | `server/src/patterns/creational/DrinkFactory.js` | TV1 | ✅ Xong ([docs](docs/patterns/factory-method.md)) |
-| Creational | Singleton | `client/src/store/cartStore.js` | TV2 | ✅ Xong ([docs](docs/patterns/singleton.md)) |
-| Creational | Builder | `server/src/patterns/creational/OrderItemBuilder.js` | TV3 | ✅ Xong ([docs](docs/patterns/builder.md)) |
-| Structural | Decorator | `server/src/patterns/structural/ToppingDecorator.js` | — | ✅ Mẫu ([docs](docs/patterns/decorator.md)) |
-| Structural | Facade | `server/src/patterns/structural/OrderFacade.js` | TV1 | ✅ Xong ([docs](docs/patterns/facade.md)) |
-| Structural | Adapter | `server/src/patterns/structural/PaymentAdapter.js` | TV3 | ✅ Xong ([docs](docs/patterns/adapter.md)) |
-| Structural | Proxy | `server/src/patterns/structural/MenuServiceProxy.js` | TV4 | ✅ Xong ([docs](docs/patterns/proxy.md)) |
-| Behavioral | Strategy | `server/src/patterns/behavioral/DiscountStrategy.js` | TV4 | ✅ Xong ([docs](docs/patterns/strategy.md)) |
-| Behavioral | State | `server/src/patterns/behavioral/OrderState.js` | TV5 | ✅ Xong ([docs](docs/patterns/state.md)) |
-| Behavioral | Observer | `server/src/patterns/behavioral/OrderEvents.js` | TV2 | ✅ Xong ([docs](docs/patterns/observer.md)) |
-| Behavioral | Chain of Responsibility | `server/src/patterns/behavioral/OrderValidation.js` | TV5 | ✅ Xong ([docs](docs/patterns/chain-of-responsibility.md)) |
+| Nhóm | Pattern | File | Test | Phụ trách | Trạng thái |
+|---|---|---|---|---|---|
+| Creational | Factory Method | `server/src/patterns/creational/DrinkFactory.js` | `factory.test.js` | TV1 | ✅ Xong ([docs](docs/patterns/factory-method.md)) |
+| Creational | Singleton | `client/src/store/cartStore.js` | `client/tests/cartStore.test.js` | TV2 | ✅ Xong ([docs](docs/patterns/singleton.md)) |
+| Creational | Builder | `server/src/patterns/creational/OrderItemBuilder.js` | `builder.test.js`, `cart.test.js` | TV3 | ✅ Xong ([docs](docs/patterns/builder.md)) |
+| Structural | Decorator | `server/src/patterns/structural/ToppingDecorator.js` | `decorator.test.js` | — | ✅ Mẫu ([docs](docs/patterns/decorator.md)) |
+| Structural | Facade | `server/src/patterns/structural/OrderFacade.js` | `facade.test.js`, `place-order.test.js` | TV1 | ✅ Xong ([docs](docs/patterns/facade.md)) |
+| Structural | Adapter | `server/src/patterns/structural/PaymentAdapter.js` | `adapter.test.js`, `payment.test.js` | TV3 | ✅ Xong ([docs](docs/patterns/adapter.md)) |
+| Structural | Proxy | `server/src/patterns/structural/MenuServiceProxy.js` | `proxy.test.js`, `admin-menu.test.js` | TV4 | ✅ Xong ([docs](docs/patterns/proxy.md)) |
+| Behavioral | Strategy | `server/src/patterns/behavioral/DiscountStrategy.js` | `strategy.test.js`, `voucher.test.js` | TV4 | ✅ Xong ([docs](docs/patterns/strategy.md)) |
+| Behavioral | State | `server/src/patterns/behavioral/OrderState.js` | `state.test.js`, `order.test.js`, `admin-orders.test.js` | TV5 | ✅ Xong ([docs](docs/patterns/state.md)) |
+| Behavioral | Observer | `server/src/patterns/behavioral/OrderEvents.js` | `observer.test.js`, `events.test.js` | TV2 | ✅ Xong ([docs](docs/patterns/observer.md)) |
+| Behavioral | Chain of Responsibility | `server/src/patterns/behavioral/OrderValidation.js` | `chain.test.js` | TV5 | ✅ Xong ([docs](docs/patterns/chain-of-responsibility.md)) |
+
+Test ở `server/tests/` trừ khi ghi rõ; tất cả PASS, không còn `todo`. Test đầu-cuối theo 9 tiêu chí nghiệm thu (đi qua 10 pattern phía server; Singleton nằm ở trình duyệt): `npm run test:acceptance`. Bảng test case thủ công: `docs/TEST_CASES.md`.
 
 ## Tài khoản demo (chỉ dùng khi phát triển)
 
