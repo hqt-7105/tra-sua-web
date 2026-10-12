@@ -1,7 +1,7 @@
 # Hợp đồng API
 
 Base URL khi dev: `http://localhost:3001/api` (frontend gọi `/api/...`, Vite tự chuyển tiếp).
-Lỗi luôn có dạng `{ "error": "Thông báo tiếng Việt" }`. Lỗi kiểm tra dữ liệu (400) có thêm `"field"` cho biết ô nào sai.
+Lỗi luôn có dạng `{ "error": "Thông báo tiếng Việt" }`. Mọi response có header bảo mật `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`. Lỗi kiểm tra dữ liệu (400) có thêm `"field"` cho biết ô nào sai.
 Route `/admin/*` (trừ `/admin/login`) cần header `Authorization: Bearer <token>`.
 
 | Method | Endpoint | Trạng thái | Phụ trách |
@@ -198,6 +198,7 @@ Lỗi: `400` chữ ký sai hoặc gateway lạ (thiếu `gateway` thì kèm `fie
 Request `{ "email": "admin@may.vn", "password": "admin123" }`
 Response `200`: `{ "token": "9f1c...", "user": { "id": 1, "email": "admin@may.vn", "name": "Quản trị viên", "role": "admin" } }`
 Lỗi `401` "Email hoặc mật khẩu không đúng" (sai email hay sai mật khẩu đều cùng thông báo). Email không phân biệt hoa thường.
+Sai quá 5 lần trong 1 phút từ cùng một IP → `429` "Bạn đăng nhập sai quá nhiều lần..." kèm header `Retry-After` (giây); đăng nhập đúng không bị tính.
 
 `POST /admin/logout` (kèm token) → `204`, token hết hiệu lực. `GET /admin/me` → `{ id, email, name, role }`.
 Mọi route `/admin/*` khác: thiếu/sai/hết hạn token (8 giờ) → `401` "Vui lòng đăng nhập"; sai vai trò → `403` "Bạn không có quyền thực hiện thao tác này".

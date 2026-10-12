@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { HttpError } from '../middlewares/errorHandler.js';
 import { requireAuth } from '../middlewares/auth.js';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
+import { rateLimit } from '../middlewares/rateLimit.js';
 import { authService } from '../services/authService.js';
 import { menuService } from '../services/menuService.js';
 import { MenuServiceProxy } from '../patterns/structural/MenuServiceProxy.js';
@@ -17,7 +18,14 @@ const adminOnly = requireAuth('admin');
 
 // ---------------------------------------------------------------- TV4 (Sprint 2)
 // Đăng nhập: body { email, password } → { token, user }. Sai → 401, không nói rõ sai phần nào (BR21).
-router.post('/login', (req, res) => {
+// B4: tối đa 5 lần đăng nhập SAI mỗi phút cho mỗi IP (chống dò mật khẩu) → 429.
+const loginLimiter = rateLimit({
+  windowMs: 60_000,
+  max: 5,
+  skipSuccessfulRequests: true,
+  message: 'Bạn đăng nhập sai quá nhiều lần, vui lòng thử lại sau 1 phút',
+});
+router.post('/login', loginLimiter, (req, res) => {
   const { email, password } = req.body ?? {};
   res.json(authService.login(email, password));
 });
