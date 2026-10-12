@@ -86,7 +86,7 @@ tra-sua-web/
 | Behavioral | Strategy | `server/src/patterns/behavioral/DiscountStrategy.js` | TV4 | ✅ Xong ([docs](docs/patterns/strategy.md)) |
 | Behavioral | State | `server/src/patterns/behavioral/OrderState.js` | TV5 | ✅ Xong ([docs](docs/patterns/state.md)) |
 | Behavioral | Observer | `server/src/patterns/behavioral/OrderEvents.js` | TV2 | ⏳ Sprint 2 |
-| Behavioral | Chain of Responsibility | `server/src/patterns/behavioral/OrderValidation.js` | TV5 | ⏳ Sprint 2 |
+| Behavioral | Chain of Responsibility | `server/src/patterns/behavioral/OrderValidation.js` | TV5 | ✅ Xong ([docs](docs/patterns/chain-of-responsibility.md)) |
 
 ## Tài khoản demo (chỉ dùng khi phát triển)
 
