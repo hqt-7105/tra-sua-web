@@ -1,4 +1,4 @@
-// Chain of Responsibility — TV5 (Sprint 2). Khi cài xong, XÓA `{ todo: 'TV5-S2' }` ở từng test.
+// Chain of Responsibility — TV5 (Sprint 2). Test chấp nhận đã bật toàn bộ.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
@@ -7,8 +7,6 @@ import {
   buildOrderValidationChain,
   currentHourInVietnam,
 } from '../src/patterns/behavioral/OrderValidation.js';
-
-const TODO = { todo: 'TV5-S2' };
 
 const menuRepository = {
   getDrinkById: (id) => (id === 'ts-truyen-thong' ? { id, isActive: true } : null),
@@ -42,16 +40,16 @@ test('giờ Việt Nam tính đúng múi giờ', () => {
   assert.equal(currentHourInVietnam(new Date('2026-10-26T16:00:00Z')), 23);
 });
 
-test('đơn hợp lệ đi hết chuỗi', TODO, () => {
+test('đơn hợp lệ đi hết chuỗi', () => {
   assert.equal(chainAt(10).validate(valid()), true);
   assert.equal(chainAt(10).validate({ ...valid(), customer: { ...valid().customer, phone: '+84912345678' } }), true);
 });
 
-test('giỏ trống', TODO, () => {
+test('giỏ trống', () => {
   expectField({ ...valid(), items: [] }, 'items');
 });
 
-test('thông tin giao hàng', TODO, () => {
+test('thông tin giao hàng', () => {
   const base = valid();
   expectField({ ...base, customer: { ...base.customer, name: ' A ' } }, 'customer.name');
   expectField({ ...base, customer: { ...base.customer, phone: '0123456789' } }, 'customer.phone');
@@ -59,11 +57,11 @@ test('thông tin giao hàng', TODO, () => {
   expectField({ ...base, customer: { ...base.customer, address: 'Q1' } }, 'customer.address');
 });
 
-test('phương thức thanh toán', TODO, () => {
+test('phương thức thanh toán', () => {
   expectField({ ...valid(), paymentMethod: 'BITCOIN' }, 'paymentMethod');
 });
 
-test('món, topping và số lượng', TODO, () => {
+test('món, topping và số lượng', () => {
   const item = valid().items[0];
   expectField({ ...valid(), items: [{ ...item, drinkId: 'khong-co' }] }, 'items[0].drinkId');
   expectField({ ...valid(), items: [item, { ...item, toppingIds: ['khong-co'] }] }, 'items[1].toppingIds');
@@ -72,14 +70,14 @@ test('món, topping và số lượng', TODO, () => {
   expectField({ ...valid(), items: [{ ...item, quantity: 1.5 }] }, 'items[0].quantity');
 });
 
-test('giờ mở cửa 08:00 – trước 22:00', TODO, () => {
+test('giờ mở cửa 08:00 – trước 22:00', () => {
   assert.equal(chainAt(8).validate(valid()), true);
   assert.equal(chainAt(21).validate(valid()), true);
   expectField(valid(), 'store', 7);
   expectField(valid(), 'store', 22);
 });
 
-test('dừng ở lỗi ĐẦU TIÊN theo thứ tự chuỗi', TODO, () => {
+test('dừng ở lỗi ĐẦU TIÊN theo thứ tự chuỗi', () => {
   const request = { ...valid(), items: [], customer: { ...valid().customer, phone: 'sai' } };
   expectField(request, 'items', 23);
 });
